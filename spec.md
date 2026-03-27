@@ -269,9 +269,86 @@ Not for: couples, family groups, public creators, professional networks.
 
 ---
 
-## 5. Data / Dashboard
+## 5. Card styles
 
-> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §6.
+> DRAFT writes every card in one of four styles. The style shapes the tone and framing — not the facts. Every card is warm, personal, and always written in the third person about the subject.
+
+### Writing rules
+
+- **Person:** Always 3rd person. Never "you" or "I".
+- **Headline:** 4–8 words. Max 55 characters. No period.
+- **Body:** 1–2 sentences. Max 160 characters total.
+- **Names:** Use first name only, exactly as entered at onboarding.
+- **Tone baseline:** Warm across all styles. Roast is never mean.
+- **Facts:** Never fabricate. Only write what the user actually shared.
+
+---
+
+### Styles
+
+#### Hype
+
+Headline frames the situation as something worth celebrating — even when it's mundane. Body adds genuine warmth. Reads like the most supportive person in the group chat.
+
+- Lead with what went right, even if small.
+- Body adds genuine warmth, not hype for its own sake.
+- Don't oversell — understatement with warmth lands better than enthusiasm.
+
+**Headline:** A simple weekend done right
+**Body:** He went home, slowed down, and kept things easy. No chaos, no pressure, just a clean reset with family.
+
+---
+
+#### Roast
+
+Headline names the slightly ridiculous thing. Body lands the punchline with one extra detail. Warm, not mean — the kind of thing a close friend would say to your face.
+
+- Headline calls out the absurdity with precision.
+- Body lands the punchline with one extra detail.
+- Never punch down — the joke is about the situation, not the person.
+
+**Headline:** Maximum driving, minimum actual weekend
+**Body:** Spent more time on the road than doing anything else. Saturday there, Sunday back, that's the whole story.
+
+---
+
+#### Teaser
+
+Headline drops just enough to make you curious. Body adds one detail but leaves a gap — the kind that makes you want to message them. DRAFT as conversation starter.
+
+- Headline hints without explaining.
+- Body adds one detail but withholds the conclusion.
+- Leave the gap intentional — the card should make friends reach out.
+
+**Headline:** His "chill" weekend sounds… interesting
+**Body:** Just a quick trip to his parents, nothing special he said. But it felt like he skipped over something.
+
+---
+
+#### Gossip
+
+Headline sounds like something whispered across a table. Body leans in with one more detail. Conspiratorial and warm — makes the mundane feel like actual news.
+
+- Headline frames it as something worth leaning in for.
+- Body adds one more detail with a knowing tone.
+- Keep it warm — conspiratorial, never malicious.
+
+**Headline:** He quietly went home this weekend
+**Body:** Didn't make a thing of it, just slipped it in casually. But the quick in-and-out feels a bit telling.
+
+---
+
+### Style selection
+
+For MVP, DRAFT picks a style at random — each of the four styles has an equal 25% chance of being selected each time a card is generated. This ensures variety in the feed and provides an even distribution to measure engagement per style from the first cohort.
+
+**Future (post-MVP):** Style selection becomes content-based — matched to the nature of the input (e.g. Hype for achievements, Roast for self-deprecating stories, Teaser for vague answers, Gossip for social situations).
+
+---
+
+## 6. Data / Dashboard
+
+> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §7.
 
 ---
 
@@ -307,7 +384,7 @@ Not for: couples, family groups, public creators, professional networks.
 
 ---
 
-## 6. Analytics event definitions
+## 7. Analytics event definitions
 
 > Naming convention: Title Case, Object followed by past-tense verb (e.g. "Card Viewed", "Prompt Dismissed"). Aligns with Amon standard.
 > All iOS events include `current_view` (required) and `previous_view` (optional) as standard properties on every event.
@@ -345,7 +422,7 @@ TBD when flows are ready.
 
 ---
 
-## 7. Open questions
+## 8. Open questions
 
 **Must be resolved before build**
 
