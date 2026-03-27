@@ -2,15 +2,13 @@
 
 > **Your friend group has a personal journalist.** DRAFT talks to each of you, extracts what's going on, and publishes it as a shared daily feed — so you always know what's happening in your friends' lives, without anyone having to post.
 
-> `[CLARIFY]` "DRAFT" is a codename. Final app name to be brainstormed before public launch.
-
 ---
 
 ## 1. Overview
 
 **Problem**
 
-Nobody shares what's actually going on in their life anymore. Social platforms became either performative (Instagram as personal brand) or algorithmically driven away from actual friends (TikTok). The real updates (what you're doing this weekend, that you're stressed at work, that you're going to a concert) stay trapped in your head because there's no low-friction way to share them with the people who care.
+There are two reasons people have stopped sharing what's actually going on in their lives. First, creating content has become high-friction and high-pressure — you need to think of something worth posting, frame it, and accept that it will be judged. Most people don't bother. Second, the content they do consume is algorithmic and performative — platforms optimise for engagement, not relevance, so your feed is full of strangers and influencers, not the real daily updates from the people you care about. The result: you have no idea what's going on in your friends' lives, and neither do they.
 
 **Target users**
 
@@ -25,12 +23,10 @@ Not for: couples, family groups, public creators, professional networks.
 ## 2. Success metrics
 
 
-| Hypothesis                                                                 | Metric                                            | Target |
-| -------------------------------------------------------------------------- | ------------------------------------------------- | ------ |
-| Draft posts are interesting enough to make users engage daily with friends | Daily readers interacting with ≥ 1 card           | ≥ 40%  |
-| Users answer when DRAFT asks                                               | Prompt Completed / Prompt Viewed per user per day | ≥ 60%  |
-| Cards are worth sharing                                                    | Card Shared events / sessions                     | ≥ 0.5  |
-| The product creates a daily habit                                          | Users with ≥ 1 session on day 7                   | ≥ 35%  |
+| # | Hypothesis | Metric | Target |
+|---|------------|--------|--------|
+| H1 | People are willing to share small moments of their life if an AI asks them — rather than having to initiate it themselves | Prompt Completed / Prompt Sent | ≥ 60% |
+| H2 | Daily updates from friends are interesting enough to make users engage with the content | % DAU who liked or shared ≥ 1 card | ≥ 40% |
 
 
 ---
@@ -249,7 +245,7 @@ Not for: couples, family groups, public creators, professional networks.
 
 ### Flow: Settings
 
-**Trigger**: User navigates to Settings from the Profile tab.
+**Trigger**: User navigates to Settings from the Home page
 
 **End state**: User has updated a setting or taken an account action.
 
@@ -257,14 +253,14 @@ Not for: couples, family groups, public creators, professional networks.
 
 1. **Settings screen**: The user sees a list of options grouped by category (see content below).
 2. **Permission settings**: Tapping Notifications or Contacts deep-links to the relevant iOS system settings screen.
-3. **Account actions**: Sign Out logs the user out and returns to the splash screen. Delete Account triggers a confirmation dialog before permanent deletion.
+3. **Account actions**: Delete Account triggers a confirmation dialog before permanent deletion.
 
 #### Business rules
 
-- [settings content] Access: Notifications, Contacts. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Account: Sign Out. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- [settings content] Profile: Name (editable), Profile photo (editable). Access: Notifications, Contacts. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- [profile editing] There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
 - [component] Reuse the generic Amon settings component already used in Orai and Frank.
 - [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all followers' feeds immediately. The user's friends are not notified.
-- [sign out] In MVP with no authentication, Sign Out clears the local session. The user loses access to their account if they cannot restore it. `[CLARIFY]` Sign out behaviour must be validated with engineering given the no-auth MVP strategy.
 
 #### Error paths & edge cases
 
@@ -282,12 +278,11 @@ Not for: couples, family groups, public creators, professional networks.
 ### North star charts
 
 
-| Chart                   | Hypothesis validated                   | Calculation                                                 | Events                                                            |
-| ----------------------- | -------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
-| Daily Reader Rate       | Users engage daily with friends' cards | `unique(Card Liked OR Card Shared OR Card Moderated) / MAU` | Card Liked, Card Shared, Card Moderated                           |
-| Prompt Response Rate    | Users answer when DRAFT asks           | `unique(Prompt Completed) / unique(Prompt Viewed)` per day  | Prompt Viewed, Prompt Completed                                   |
-| Card Shares per Session | Cards are worth sharing                | `count(Card Shared) / count(Application Opened)`            | Card Shared, [Amplitude] Application Opened                       |
-| D7 Retention            | The product creates a daily habit      | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
+| Chart                  | Hypothesis | Calculation                                                             | Events                                                            |
+| ---------------------- | ---------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Daily Engagement Rate  | H2         | `% of DAU who liked or shared ≥ 1 card` (rolling 7-day)                | Card Liked, Card Shared                                           |
+| Prompt Completion Rate | H1         | `count(Prompt Completed) / count(Prompt Sent)` per day                  | Prompt Completed, Push Sent                                       |
+| D7 Retention           | —          | `users with ≥1 session on day 7 / users installed on day 0`            | [Amplitude] Application Installed, [Amplitude] Application Opened |
 
 
 ---
@@ -295,14 +290,17 @@ Not for: couples, family groups, public creators, professional networks.
 ### Supporting funnel charts
 
 
-| Chart                      | Purpose                                | Calculation                                                                       | Events                                                                                        |
-| -------------------------- | -------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Onboarding Funnel          | Identify drop-off steps                | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
-| Push Opt-in Rate           | Measure notification permission rate   | `Push Permission Completed (successful=true) / Push Permission Viewed`            | Push Permission Viewed, Push Permission Completed                                             |
-| New Users (Last 7 Days)    | Track acquisition pace                 | `count(Account Created)` rolling 7-day                                            | Account Created                                                                               |
-| Prompt Follow-up Rate      | Measure depth of exchange              | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`      | Prompt Completed                                                                              |
-| Card Interaction Breakdown | Understand how users engage with cards | `count(Card Liked) + count(Card Shared) + count(Card Moderated)` split by type    | Card Liked, Card Shared, Card Moderated                                                       |
-| Invite Link Share Rate     | Measure growth loop activation         | `count(Invite Link Shared) / DAU`                                                 | Invite Link Shared                                                                            |
+| Chart                        | Purpose                                      | Calculation                                                                                              | Events                                                                                        |
+| ---------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Onboarding Funnel            | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Friends Added (First 24h)    | Measure activation — is the graph seeded?    | `avg(Friend Request Accepted) per user in first 24h after Account Created`                               | Friend Request Accepted, Account Created                                                      |
+| Average Cards Available      | Is there enough content in the feed?         | `count(distinct card_id seen) / unique active users` per day                                             | Card Viewed                                                                                   |
+| Question → Card Conversion   | How much signal turns into a published card? | `count(Card Generated) / count(Prompt Completed)`                                                        | Prompt Completed, Card Generated (backend — to add)                                           |
+| Push Opt-in Rate             | Measure notification permission rate         | `Push Permission Completed (successful=true) / Push Permission Viewed`                                   | Push Permission Viewed, Push Permission Completed                                             |
+| New Users (Last 7 Days)      | Track acquisition pace                       | `count(Account Created)` rolling 7-day                                                                   | Account Created                                                                               |
+| Prompt Follow-up Rate        | Measure depth of exchange                    | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`                             | Prompt Completed                                                                              |
+| Card Interaction Breakdown   | Understand split of like vs share            | `count(Card Liked)` vs `count(Card Shared)` split by type                                                | Card Liked, Card Shared                                                                       |
+| Invite Link Share Rate       | Measure growth loop activation               | `count(Invite Link Shared) / DAU`                                                                        | Invite Link Shared                                                                            |
 
 
 > `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
@@ -343,6 +341,26 @@ Events new to DRAFT. Full property definitions below.
 
 ```yaml
 events:
+  - name: Friend Request Sent
+    description: "Tracks when a user sends a friend request. Fires when the user confirms the add-friend modal after scanning a QR code or opening an invite link."
+    source: ios
+    properties:
+      - name: current_view
+        type: string
+        required: true
+
+  - name: Invite Link Opened
+    description: "Tracks when a user opens an invite link or scans a QR code and the add-friend confirmation modal is displayed."
+    source: ios
+    properties:
+      - name: inviter_id
+        type: string
+        required: true
+        description: "Account ID of the user who shared the link or QR code"
+      - name: current_view
+        type: string
+        required: true
+
   - name: Friend Request Accepted
     description: "Tracks when a user accepts a friend request. Fires on tap of Accept button, after mutual friendship is established."
     source: ios
@@ -511,7 +529,6 @@ events:
 
 **Must be resolved before build**
 
-- `[CLARIFY]` Final app name: "DRAFT" is a codename. Brainstorm needed before public launch. — owner: Aymeric
 - `[CLARIFY]` Theme library: the full list of 10–30 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. — owner: Aymeric
 - `[CLARIFY]` Theme selection logic: random, or contextually chosen based on recency and user profile? — owner: Aymeric + engineering
 - `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering. — owner: engineering
