@@ -1,8 +1,8 @@
 ---
 title: "DRAFT — Spec"
-version: "1.2"
+version: "1.3"
 status: "draft"
-last_updated: "2026-03-26"
+last_updated: "2026-03-27"
 owner: "Aymeric"
 ---
 
@@ -32,18 +32,18 @@ Not for: couples, family groups, public creators, professional networks.
 
 ## 2. Success metrics
 
-| Metric | Target | Signal |
-|--------|--------|--------|
-| Daily readers interacting with ≥ 1 card | ≥ 40% MAU | `cards_interacted / dau` |
-| Users responding when DRAFT prompts | ≥ 60% | `prompt_responded / prompt_sent` |
-| Card shares per session | ≥ 0.5 | `card_shared / sessions` |
-| D7 retention | ≥ 35% | Users with ≥ 1 session on day 7 |
+| Hypothesis | Metric | Target |
+|------------|--------|--------|
+| Users engage daily with friends' cards | Unique users with ≥ 1 card interaction / MAU | ≥ 40% |
+| Users answer when DRAFT asks | Prompt Completed / Prompt Viewed per user per day | ≥ 60% |
+| Cards are worth sharing | Card Shared events / sessions | ≥ 0.5 |
+| The product creates a daily habit | Users with ≥ 1 session on day 7 | ≥ 35% |
 
 ---
 
 ## 3. Scope
 
-**In v1**
+**In MVP**
 - No authentication: account created automatically on device at first launch
 - Minimal onboarding: name, age, gender, push permission only
 - Welcome card on first session: "[Name] just joined DRAFT!" with QR code and share link
@@ -51,13 +51,13 @@ Not for: couples, family groups, public creators, professional networks.
 - AI-generated cards published throughout the day, based on conversations with DRAFT
 - Conversational input loop: DRAFT prompts users 2× daily (9:47 and 18:12)
 - Like button on each card with visible like count
-- Share button on each card: fixed label "Share", opens iOS native share sheet (image output). CTA is never AI-generated in v1.
+- Share button on each card: fixed label "Share", opens iOS native share sheet (image output). CTA is never AI-generated in MVP.
 - Card moderation via 3-dots menu: remove card (if tagged) or report
 - Chronological feed with relative timestamps, pull-to-refresh
 - Push notifications for new cards and new prompts from DRAFT
-- App publicly available on the US App Store
+- iOS only, English, US App Store
 
-**Out of v1**
+**Out of MVP**
 - User-initiated input (DRAFT always initiates)
 - Data integrations (Spotify, Apple Health, Photos, Calendar)
 - In-app messaging
@@ -69,6 +69,7 @@ Not for: couples, family groups, public creators, professional networks.
 - Duplicate card detection when two friends mention the same event
 - Card generation restricted to daytime hours (7am–10:30pm); MVP generates at any time
 - Question sheet "closed" state: MVP always shows the last exchange, overwritten by next question
+- Android, web, non-US markets
 
 ---
 
@@ -101,19 +102,12 @@ Not for: couples, family groups, public creators, professional networks.
 - [friend graph] Friends are not added during onboarding. They are added later via the share link, QR code, or contact discovery. The onboarding funnel does not include a friend discovery step.
 - [growth] The primary acquisition mechanic for MVP is ambassador-driven: groups of friends are onboarded together via an external programme. The in-app share link and QR code support and reinforce this.
 
-#### Analytics
-
-- **Onboarding Step Viewed**: fires on `.onAppear` of each onboarding screen (`step_name`, `current_view`, `previous_view`)
-- **Onboarding Step Completed**: fires when user advances past a step (`step_name`, `completion_successful`, `values` if applicable, `current_view`, `previous_view`)
-- **Push Permission Viewed**: fires when the iOS push permission prompt is presented (`current_view`, `previous_view`)
-- **Push Permission Completed**: fires when user answers the iOS push permission prompt (`completion_successful`, `current_view`, `previous_view`)
-- **Account Created**: fires on backend after automatic account creation (`account_id`)
-
 #### Error paths & edge cases
 
 - User quits mid-onboarding → resume from the last completed step on next launch
 - User skips push permission → they can still use the app but will not receive prompt notifications; an in-app nudge is shown later
 - Welcome card QR code or share link fails to generate → show the card without the QR code with a retry button
+
 ---
 
 ### Flow: DRAFT asks a question
@@ -150,13 +144,6 @@ Not for: couples, family groups, public creators, professional networks.
 - [offline] If the user submits while offline: the response is stored locally with a "pending" status visible to the user.
 - [bottom sheet states] `[CLARIFY]` The DRAFT question sheet has at least three distinct states that need to be designed: (a) active — DRAFT is waiting for a response; (b) processing — the user has just replied and DRAFT is doing her thing (some equivalent of "DRAFT is writing…"); (c) idle — nothing to do right now, waiting for the next scheduled prompt. Each state needs a defined UI treatment before build. It is auto-sent when the connection is restored. If sending fails repeatedly, a red error indicator is shown with an option to retry. Reuse the same implementation as Orai and Frank.
 
-#### Analytics
-
-- **Push Clicked**: fires when user opens the app from a push notification tap (`type: card | prompt`, `notification_id`, `current_view`)
-- **Prompt Viewed**: fires on `.onAppear` of the question sheet (`prompt_id`, `prompt_type: scheduled`, `current_view`, `previous_view`)
-- **Prompt Completed**: fires on submit tap, not on typing. Fires separately for the initial question and any follow-up. (`prompt_id`, `is_followup`, `response_length_chars`, `current_view`)
-- **Prompt Dismissed**: fires when user closes the sheet without submitting (`prompt_id`, `current_view`)
-
 #### Error paths & edge cases
 
 - User dismisses without answering → no card generated from that exchange, prompt not repeated today
@@ -191,14 +178,7 @@ Not for: couples, family groups, public creators, professional networks.
 - [own cards] If the user has zero friends, their own cards are visible only to themselves. Empty state prompts them to invite people.
 - [content window] The feed shows the last 48 hours of cards. Not a calendar day. Rolling 48-hour window.
 - [data retention] Card data is never deleted from the server. Cards are only hidden from the feed after 48h.
-- [likes] Like count is visible to all users. Who liked is not shown in v1.
-
-#### Analytics
-
-- **Card Viewed**: fires when a card is ≥ 50% visible for ≥ 1 continuous second. Fires once per card per session. (`card_id`, `card_subject_is_self`, `current_view`)
-- **Card Liked**: fires on like button tap (`card_id`, `card_subject_is_self`, `current_view`)
-- **Card Shared**: fires when user opens the iOS share sheet from a card, before the sheet opens (`card_id`, `card_subject_is_self`, `current_view`)
-- **Feed Bubble Tapped**: fires when the user taps the new activity floating bubble (`current_view`)
+- [likes] Like count is visible to all users. Who liked is not shown in MVP.
 
 #### Error paths & edge cases
 
@@ -235,11 +215,6 @@ Not for: couples, family groups, public creators, professional networks.
 - [report] All users can report any card via the 3-dots menu. Required by Apple for UGC apps.
 - `[CLARIFY]` How does the user indicate what is wrong? Do they edit the full card as free text, or is there a more structured correction flow? Must be defined before building the moderation UI.
 
-#### Analytics
-
-- **Card Moderated**: fires on confirmation only, not on menu open or Cancel (`card_id`, `action: correction_submitted | card_removed`, `current_view`)
-- **Card Reported**: fires when user submits a report (`card_id`, `current_view`)
-
 #### Error paths & edge cases
 
 - Correction submitted but DRAFT fails to regenerate → remove the card silently and notify the user: "DRAFT couldn't rewrite this one. The card has been removed."
@@ -268,150 +243,103 @@ Not for: couples, family groups, public creators, professional networks.
 - [share CTA] The top of the friend management screen always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome card and keeps the growth loop accessible at all times.
 - [removal] Friendship removal is symmetric and immediate. Neither user sees the other's cards after removal.
 
-#### Analytics
-
-- **Friend Request Accepted**: fires when user accepts a request (`current_view`)
-- **Friend Request Rejected**: fires when user rejects a request (`current_view`)
-- **Friend Removed**: fires on confirmation of removal (`current_view`)
-- **Invite Link Shared**: fires when user opens the share sheet from the friend management screen (`current_view`)
-
 #### Error paths & edge cases
 
 - User rejects a request → request disappears, no notification sent to requester
 - User removes a friend → both lose access to each other's cards immediately; cards already in the feed disappear on next refresh
 
+---
+
+### Flow: Settings
+
+**Trigger**: User navigates to Settings from the Profile tab.
+
+**End state**: User has updated a setting or taken an account action.
+
+#### Steps
+
+1. **Settings screen**: The user sees a list of options grouped by category (see content below).
+2. **Permission settings**: Tapping Notifications or Contacts deep-links to the relevant iOS system settings screen.
+3. **Account actions**: Sign Out logs the user out and returns to the splash screen. Delete Account triggers a confirmation dialog before permanent deletion.
+
+#### Business rules
+
+- [settings content] Access: Notifications, Contacts. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Account: Sign Out. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- [component] Reuse the generic Amon settings component already used in Orai and Frank.
+- [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all followers' feeds immediately. The user's friends are not notified.
+- [sign out] In MVP with no authentication, Sign Out clears the local session. The user loses access to their account if they cannot restore it. `[CLARIFY]` Sign out behaviour must be validated with engineering given the no-auth MVP strategy.
+
+#### Error paths & edge cases
+
+- Deep link to iOS settings fails → show a manual instruction ("Go to Settings > DRAFT > Notifications")
+- Delete account fails on backend → show error, do not clear local session
 
 ---
 
-## 5. Screens & navigation
+## 5. Data / Dashboard
 
-```
-App Launch
-├── [No session] → Onboarding stack
-│   ├── Splash
-│   ├── Name
-│   ├── Age
-│   ├── Gender
-│   └── Push permission
-│       └── [Done] → Home feed (replaces stack)
-│             └── DRAFT first question (bottom sheet, opens immediately)
-│
-└── [Session exists] → Main TabView
-    ├── Tab 1: Home → NavigationStack
-    │   ├── Home feed
-    │   │   └── DRAFT question sheet (bottom sheet, appears over feed)
-    ├── Tab 2: Friends → NavigationStack
-    │   └── Friend management (requests + friend list + share CTA)
-    └── Tab 3: Profile → NavigationStack
-        ├── Profile (minimal: avatar + name only)
-        └── Settings (push)
-```
+> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §6.
 
-| Screen | Purpose | Entry points | Key actions |
-|--------|---------|--------------|-------------|
-| Splash | Reinforce the brand and check whether the user has an existing session | App launch | None (auto-advances) |
-| Welcome | Introduce DRAFT and what she does before the user commits to onboarding | Splash (new user) | "Get started" |
-| Context collection | Gather rich context so DRAFT can write the first 4–5 cards | Welcome | Answer questions (format TBD) |
-| Sign up / Sign in | Create a new account or restore an existing one | Onboarding, invite deep link | Apple, Google, or Email |
-| Friend discovery | Find and add friends so the feed is populated from day one | Post sign-up | Send friend request, invite, skip |
-| Home feed | The core daily experience where users read cards and interact | Post-onboarding, push notification tap | Scroll, pull-to-refresh, like, share, 3-dots |
-| Friend management | Review pending friend requests and manage current friends. Share CTA at the top to grow the list. | Tab bar | Accept, reject, remove, share link/QR |
-| DRAFT question sheet | The input interface where DRAFT gathers signal from the user | Push notification tap | Answer, follow-up, dismiss |
-| Profile | Display the user's avatar and first name. No cards or history shown in MVP. | Tab bar | View own profile |
-| Settings | Manage permissions, get support, handle account | Profile | See settings content below |
+---
 
-**Settings screen content**
+### North star charts
 
-- Access: Notifications, Contacts
-- Community: Help, Submit Feature Request, Give a Review
-- Legal: Privacy Policy, Terms of Service
-- Account: Sign Out
-- Danger Zone: Delete Account
-- Footer: App version, build number, User ID
-- Note: reuse the generic Amon settings component already used in Orai and Frank
+| Chart | Hypothesis validated | Calculation | Events |
+|-------|---------------------|-------------|--------|
+| Daily Reader Rate | Users engage daily with friends' cards | `unique(Card Liked OR Card Shared OR Card Moderated) / MAU` | Card Liked, Card Shared, Card Moderated |
+| Prompt Response Rate | Users answer when DRAFT asks | `unique(Prompt Completed) / unique(Prompt Viewed)` per day | Prompt Viewed, Prompt Completed |
+| Card Shares per Session | Cards are worth sharing | `count(Card Shared) / count(Application Opened)` | Card Shared, [Amplitude] Application Opened |
+| D7 Retention | The product creates a daily habit | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
+
+---
+
+### Supporting funnel charts
+
+| Chart | Purpose | Calculation | Events |
+|-------|---------|-------------|--------|
+| Onboarding Funnel | Identify drop-off steps | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Push Opt-in Rate | Measure notification permission rate | `Push Permission Completed (successful=true) / Push Permission Viewed` | Push Permission Viewed, Push Permission Completed |
+| New Users (Last 7 Days) | Track acquisition pace | `count(Account Created)` rolling 7-day | Account Created |
+| Prompt Follow-up Rate | Measure depth of exchange | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)` | Prompt Completed |
+| Card Interaction Breakdown | Understand how users engage with cards | `count(Card Liked) + count(Card Shared) + count(Card Moderated)` split by type | Card Liked, Card Shared, Card Moderated |
+| Invite Link Share Rate | Measure growth loop activation | `count(Invite Link Shared) / DAU` | Invite Link Shared |
+
+> `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
 
 ---
 
 ## 6. Analytics event definitions
 
-> Naming convention: Title Case, Object followed by past-tense verb (e.g. "Card Viewed", "Prompt Dismissed"). Aligns with Amon standard — see Frank events CSV.
+> Naming convention: Title Case, Object followed by past-tense verb (e.g. "Card Viewed", "Prompt Dismissed"). Aligns with Amon standard.
 > All iOS events include `current_view` (required) and `previous_view` (optional) as standard properties on every event.
-> Events are referenced by name in the flows above (§4). Full property definitions are here.
+
+### Common events
+
+Events shared with Frank and Orai. Reuse the existing Amplitude schema as-is — do not duplicate or rename.
+
+| Event | Category | Source | Notes |
+|-------|----------|--------|-------|
+| [Amplitude] Application Installed | — | ios | Auto-tracked by Amplitude SDK |
+| [Amplitude] Application Opened | — | ios | Auto-tracked by Amplitude SDK |
+| [Amplitude] Application Backgrounded | — | ios | Auto-tracked by Amplitude SDK |
+| [Amplitude] Application Updated | — | ios | Auto-tracked by Amplitude SDK |
+| Account Created | Amon Default | backend | Same schema as Frank. `account_id` required. |
+| Account Deleted | Amon Default | backend | Same schema as Frank. `account_id` required. |
+| Onboarding Step Viewed | Amon Default | ios | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, push_permission` |
+| Onboarding Step Completed | Amon Default | ios | Same as above for `step_name` |
+| Push Permission Viewed | Amon Default | ios | Identical to Frank |
+| Push Permission Completed | Amon Default | ios | Identical to Frank |
+| Push Clicked | Amon Default | ios | `type` enum must be updated: `card, prompt` (replaces Frank's `message, checkin, broadcast, insight`) |
+| Setting Clicked | Amon Default | ios | `setting_name` values to define for DRAFT settings screen |
+
+---
+
+### App-specific events
+
+Events new to DRAFT. Full property definitions below.
 
 ```yaml
 events:
-  - name: Onboarding Step Viewed
-    description: "Tracks when a specific onboarding screen becomes visible to the user. Fires on .onAppear of each onboarding screen's root view."
-    source: ios
-    properties:
-      - name: step_name
-        type: enum
-        required: true
-        values: ["splash", "name", "age", "gender", "push_permission"]
-      - name: current_view
-        type: string
-        required: true
-      - name: previous_view
-        type: string
-        required: false
-
-  - name: Onboarding Step Completed
-    description: "Tracks when a user successfully advances past an onboarding step. Fires when the user taps continue, submits, or skips."
-    source: ios
-    properties:
-      - name: step_name
-        type: enum
-        required: true
-        values: ["name", "age", "gender", "push_permission"]
-      - name: completion_successful
-        type: boolean
-        required: true
-        description: "False if the user skipped or denied (e.g. skipped friend discovery)"
-      - name: values
-        type: string
-        required: false
-        description: "Values entered or selected during the step, where relevant"
-      - name: current_view
-        type: string
-        required: true
-      - name: previous_view
-        type: string
-        required: false
-
-  - name: Push Permission Viewed
-    description: "Tracks when the native iOS push notification permission prompt is presented. Fires when the iOS system dialog appears."
-    source: ios
-    properties:
-      - name: current_view
-        type: string
-        required: true
-      - name: previous_view
-        type: string
-        required: false
-
-  - name: Push Permission Completed
-    description: "Records the user's final decision on push notification permission. Fires when the iOS system dialog is dismissed."
-    source: ios
-    properties:
-      - name: completion_successful
-        type: boolean
-        required: true
-        description: "True if the user granted push permission"
-      - name: current_view
-        type: string
-        required: true
-      - name: previous_view
-        type: string
-        required: false
-
-  - name: Account Created
-    description: "Triggered when a new user account is successfully created in the database. Fires on the backend after auth completes."
-    source: backend
-    properties:
-      - name: account_id
-        type: string
-        required: true
-
   - name: Friend Request Accepted
     description: "Tracks when a user accepts a friend request. Fires on tap of Accept button, after mutual friendship is established."
     source: ios
@@ -444,23 +372,6 @@ events:
         type: enum
         required: true
         values: ["friend_management", "welcome_card"]
-        description: "Where the user triggered the share from"
-      - name: current_view
-        type: string
-        required: true
-
-  - name: Push Clicked
-    description: "Tracks when a user taps a push notification and opens the app. Fires when the app becomes active from a notification tap."
-    source: ios
-    properties:
-      - name: type
-        type: enum
-        required: true
-        values: ["card", "prompt"]
-        description: "The type of notification that was tapped"
-      - name: notification_id
-        type: string
-        required: false
       - name: current_view
         type: string
         required: true
@@ -529,7 +440,7 @@ events:
         required: true
 
   - name: Card Liked
-    description: "Tracks when a user taps the like button on a card. Like count is visible to all users; who liked is not shown in v1."
+    description: "Tracks when a user taps the like button on a card. Like count is visible to all users; who liked is not shown in MVP."
     source: ios
     properties:
       - name: card_id
@@ -612,7 +523,7 @@ events:
 **Engineering validation required**
 
 - `[CLARIFY]` Account persistence: no auth in MVP means if user deletes and reinstalls or switches devices, they lose their account. What is the acceptable strategy for MVP? (Accept the loss, or store a device token server-side?) — owner: engineering
-- `[CLARIFY]` Deferred deep linking: technical complexity to validate with Florian and Romain before committing to v1. — owner: engineering
+- `[CLARIFY]` Deferred deep linking: technical complexity to validate with Florian and Romain before committing to MVP. — owner: engineering
 - `[CLARIFY]` Friend discovery MVP implementation: contacts scan + username search + share link confirmed in principle, but simplest MVP approach needs an engineering brainstorm. — owner: Aymeric + engineering
 
 **Risks**
@@ -623,7 +534,7 @@ events:
 **Assumptions**
 
 - `[ASSUMPTION]` Text-only conversation with no integrations generates cards worth reading. Validation: test with real users before the full build.
-- `[ASSUMPTION]` Native card sharing via iOS share sheet (image format) is sufficient for v1 virality. Validation: track Card Shared rate and qualitative feedback from the first cohort.
+- `[ASSUMPTION]` Native card sharing via iOS share sheet (image format) is sufficient for MVP virality. Validation: track Card Shared rate and qualitative feedback from the first cohort.
 
 ---
 
