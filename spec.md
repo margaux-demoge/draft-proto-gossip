@@ -340,9 +340,7 @@ Headline sounds like something whispered across a table. Body leans in with one 
 
 ### Style selection
 
-For MVP, DRAFT picks a style at random — each of the four styles has an equal 25% chance of being selected each time a card is generated. This ensures variety in the feed and provides an even distribution to measure engagement per style from the first cohort.
-
-**Future (post-MVP):** Style selection becomes content-based — matched to the nature of the input (e.g. Hype for achievements, Roast for self-deprecating stories, Teaser for vague answers, Gossip for social situations).
+DRAFT picks a style at random — each of the four styles has an equal 25% chance of being selected each time a card is generated. This ensures variety in the feed and provides an even distribution to measure engagement per style from the first cohort.
 
 ---
 
