@@ -1,10 +1,10 @@
 ---
-
-## title: "DRAFT — Spec"
+title: "DRAFT — Spec"
 version: "1.3"
 status: "draft"
 last_updated: "2026-03-27"
 owner: "Aymeric"
+---
 
 # DRAFT
 
