@@ -1,10 +1,10 @@
 ---
-title: "DRAFT — Spec"
+
+## title: "DRAFT — Spec"
 version: "1.3"
 status: "draft"
 last_updated: "2026-03-27"
 owner: "Aymeric"
----
 
 # DRAFT
 
@@ -32,18 +32,21 @@ Not for: couples, family groups, public creators, professional networks.
 
 ## 2. Success metrics
 
-| Hypothesis | Metric | Target |
-|------------|--------|--------|
-| Users engage daily with friends' cards | Unique users with ≥ 1 card interaction / MAU | ≥ 40% |
-| Users answer when DRAFT asks | Prompt Completed / Prompt Viewed per user per day | ≥ 60% |
-| Cards are worth sharing | Card Shared events / sessions | ≥ 0.5 |
-| The product creates a daily habit | Users with ≥ 1 session on day 7 | ≥ 35% |
+
+| Hypothesis                                                                 | Metric                                            | Target |
+| -------------------------------------------------------------------------- | ------------------------------------------------- | ------ |
+| Draft posts are interesting enough to make users engage daily with friends | Daily readers interacting with ≥ 1 card           | ≥ 40%  |
+| Users answer when DRAFT asks                                               | Prompt Completed / Prompt Viewed per user per day | ≥ 60%  |
+| Cards are worth sharing                                                    | Card Shared events / sessions                     | ≥ 0.5  |
+| The product creates a daily habit                                          | Users with ≥ 1 session on day 7                   | ≥ 35%  |
+
 
 ---
 
 ## 3. Scope
 
 **In MVP**
+
 - No authentication: account created automatically on device at first launch
 - Minimal onboarding: name, age, gender, push permission only
 - Welcome card on first session: "[Name] just joined DRAFT!" with QR code and share link
@@ -58,6 +61,7 @@ Not for: couples, family groups, public creators, professional networks.
 - iOS only, English, US App Store
 
 **Out of MVP**
+
 - User-initiated input (DRAFT always initiates)
 - Data integrations (Spotify, Apple Health, Photos, Calendar)
 - In-app messaging
@@ -199,6 +203,7 @@ Not for: couples, family groups, public creators, professional networks.
 #### Steps (own card — user is the subject)
 
 1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "This is wrong", "Remove this card", and Cancel.
+
 2a. **"This is wrong"**: A text field opens pre-filled with the card's current content. The user edits the inaccurate part and submits the correction to DRAFT.
 2b. **"Remove this card"**: A confirmation dialog asks the user to confirm removal. On confirm, the card is immediately deleted from all followers' feeds.
 
@@ -284,25 +289,29 @@ Not for: couples, family groups, public creators, professional networks.
 
 ### North star charts
 
-| Chart | Hypothesis validated | Calculation | Events |
-|-------|---------------------|-------------|--------|
-| Daily Reader Rate | Users engage daily with friends' cards | `unique(Card Liked OR Card Shared OR Card Moderated) / MAU` | Card Liked, Card Shared, Card Moderated |
-| Prompt Response Rate | Users answer when DRAFT asks | `unique(Prompt Completed) / unique(Prompt Viewed)` per day | Prompt Viewed, Prompt Completed |
-| Card Shares per Session | Cards are worth sharing | `count(Card Shared) / count(Application Opened)` | Card Shared, [Amplitude] Application Opened |
-| D7 Retention | The product creates a daily habit | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
+
+| Chart                   | Hypothesis validated                   | Calculation                                                 | Events                                                            |
+| ----------------------- | -------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| Daily Reader Rate       | Users engage daily with friends' cards | `unique(Card Liked OR Card Shared OR Card Moderated) / MAU` | Card Liked, Card Shared, Card Moderated                           |
+| Prompt Response Rate    | Users answer when DRAFT asks           | `unique(Prompt Completed) / unique(Prompt Viewed)` per day  | Prompt Viewed, Prompt Completed                                   |
+| Card Shares per Session | Cards are worth sharing                | `count(Card Shared) / count(Application Opened)`            | Card Shared, [Amplitude] Application Opened                       |
+| D7 Retention            | The product creates a daily habit      | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
+
 
 ---
 
 ### Supporting funnel charts
 
-| Chart | Purpose | Calculation | Events |
-|-------|---------|-------------|--------|
-| Onboarding Funnel | Identify drop-off steps | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
-| Push Opt-in Rate | Measure notification permission rate | `Push Permission Completed (successful=true) / Push Permission Viewed` | Push Permission Viewed, Push Permission Completed |
-| New Users (Last 7 Days) | Track acquisition pace | `count(Account Created)` rolling 7-day | Account Created |
-| Prompt Follow-up Rate | Measure depth of exchange | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)` | Prompt Completed |
-| Card Interaction Breakdown | Understand how users engage with cards | `count(Card Liked) + count(Card Shared) + count(Card Moderated)` split by type | Card Liked, Card Shared, Card Moderated |
-| Invite Link Share Rate | Measure growth loop activation | `count(Invite Link Shared) / DAU` | Invite Link Shared |
+
+| Chart                      | Purpose                                | Calculation                                                                       | Events                                                                                        |
+| -------------------------- | -------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Onboarding Funnel          | Identify drop-off steps                | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Push Opt-in Rate           | Measure notification permission rate   | `Push Permission Completed (successful=true) / Push Permission Viewed`            | Push Permission Viewed, Push Permission Completed                                             |
+| New Users (Last 7 Days)    | Track acquisition pace                 | `count(Account Created)` rolling 7-day                                            | Account Created                                                                               |
+| Prompt Follow-up Rate      | Measure depth of exchange              | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`      | Prompt Completed                                                                              |
+| Card Interaction Breakdown | Understand how users engage with cards | `count(Card Liked) + count(Card Shared) + count(Card Moderated)` split by type    | Card Liked, Card Shared, Card Moderated                                                       |
+| Invite Link Share Rate     | Measure growth loop activation         | `count(Invite Link Shared) / DAU`                                                 | Invite Link Shared                                                                            |
+
 
 > `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
 
@@ -317,20 +326,22 @@ Not for: couples, family groups, public creators, professional networks.
 
 Events shared with Frank and Orai. Reuse the existing Amplitude schema as-is — do not duplicate or rename.
 
-| Event | Category | Source | Notes |
-|-------|----------|--------|-------|
-| [Amplitude] Application Installed | — | ios | Auto-tracked by Amplitude SDK |
-| [Amplitude] Application Opened | — | ios | Auto-tracked by Amplitude SDK |
-| [Amplitude] Application Backgrounded | — | ios | Auto-tracked by Amplitude SDK |
-| [Amplitude] Application Updated | — | ios | Auto-tracked by Amplitude SDK |
-| Account Created | Amon Default | backend | Same schema as Frank. `account_id` required. |
-| Account Deleted | Amon Default | backend | Same schema as Frank. `account_id` required. |
-| Onboarding Step Viewed | Amon Default | ios | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, push_permission` |
-| Onboarding Step Completed | Amon Default | ios | Same as above for `step_name` |
-| Push Permission Viewed | Amon Default | ios | Identical to Frank |
-| Push Permission Completed | Amon Default | ios | Identical to Frank |
-| Push Clicked | Amon Default | ios | `type` enum must be updated: `card, prompt` (replaces Frank's `message, checkin, broadcast, insight`) |
-| Setting Clicked | Amon Default | ios | `setting_name` values to define for DRAFT settings screen |
+
+| Event                                | Category     | Source  | Notes                                                                                                 |
+| ------------------------------------ | ------------ | ------- | ----------------------------------------------------------------------------------------------------- |
+| [Amplitude] Application Installed    | —            | ios     | Auto-tracked by Amplitude SDK                                                                         |
+| [Amplitude] Application Opened       | —            | ios     | Auto-tracked by Amplitude SDK                                                                         |
+| [Amplitude] Application Backgrounded | —            | ios     | Auto-tracked by Amplitude SDK                                                                         |
+| [Amplitude] Application Updated      | —            | ios     | Auto-tracked by Amplitude SDK                                                                         |
+| Account Created                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                          |
+| Account Deleted                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                          |
+| Onboarding Step Viewed               | Amon Default | ios     | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, push_permission`        |
+| Onboarding Step Completed            | Amon Default | ios     | Same as above for `step_name`                                                                         |
+| Push Permission Viewed               | Amon Default | ios     | Identical to Frank                                                                                    |
+| Push Permission Completed            | Amon Default | ios     | Identical to Frank                                                                                    |
+| Push Clicked                         | Amon Default | ios     | `type` enum must be updated: `card, prompt` (replaces Frank's `message, checkin, broadcast, insight`) |
+| Setting Clicked                      | Amon Default | ios     | `setting_name` values to define for DRAFT settings screen                                             |
+
 
 ---
 
@@ -513,7 +524,6 @@ events:
 - `[CLARIFY]` Theme selection logic: random, or contextually chosen based on recency and user profile? — owner: Aymeric + engineering
 - `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering. — owner: engineering
 - `[CLARIFY]` Push notification copy strategy: first notification should feel like a personal message from DRAFT (not a direct question), referencing past context. Exact copy and format to be defined. — owner: Aymeric
-
 - `[CLARIFY]` Card data structure: headline + body text? Multiple card types? Author display format ("DRAFT" vs "DRAFT on [Name]")? Must be defined before back-end build. — owner: Aymeric + engineering
 - `[CLARIFY]` Tone of voice: DRAFT's copy register, level of humour, and how she writes about people. Must be defined before front-end build. — owner: Aymeric
 - `[CLARIFY]` Card moderation UI: does the user edit the full card as free text, or is there a more structured correction flow? — owner: Aymeric
