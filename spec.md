@@ -252,12 +252,12 @@ Not for: couples, family groups, public creators, professional networks.
 #### Steps
 
 1. **Settings screen**: The user sees a list of options grouped by category (see content below).
-2. **Permission settings**: Tapping Notifications or Contacts deep-links to the relevant iOS system settings screen.
+2. **Permission settings**: Tapping Notifications deep-links to the relevant iOS system settings screen.
 3. **Account actions**: Delete Account triggers a confirmation dialog before permanent deletion.
 
 #### Business rules
 
-- [settings content] Profile: Name (editable), Profile photo (editable). Access: Notifications, Contacts. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- [settings content] Profile: Name (editable), Profile photo (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
 - [profile editing] There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
 - [component] Reuse the generic Amon settings component already used in Orai and Frank.
 - [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all followers' feeds immediately. The user's friends are not notified.
