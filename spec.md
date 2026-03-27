@@ -1,11 +1,3 @@
----
-title: "DRAFT — Spec"
-version: "1.3"
-status: "draft"
-last_updated: "2026-03-27"
-owner: "Aymeric"
----
-
 # DRAFT
 
 > **Your friend group has a personal journalist.** DRAFT talks to each of you, extracts what's going on, and publishes it as a shared daily feed — so you always know what's happening in your friends' lives, without anyone having to post.
