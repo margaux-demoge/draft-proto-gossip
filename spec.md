@@ -8,7 +8,7 @@
 
 **Problem**
 
-There are two reasons people have stopped sharing what's actually going on in their lives. First, creating content has become high-friction and high-pressure — you need to think of something worth posting, frame it, and accept that it will be judged. Most people don't bother. Second, the content they do consume is algorithmic and performative — platforms optimise for engagement, not relevance, so your feed is full of strangers and influencers, not the real daily updates from the people you care about. The result: you have no idea what's going on in your friends' lives, and neither do they.
+There are two reasons people have stopped sharing what's actually going on in their lives. First, creating content has become high-friction and high-pressure - you need to think of something worth posting, frame it, and accept that it will be judged. Most people don't bother. Second, the content they do consume is algorithmic and performative - platforms optimise for engagement, not relevance, so your feed is full of strangers and influencers, not the real daily updates from the people you care about. The result: you have no idea what's going on in your friends' lives, and neither do they.
 
 **Target users**
 
@@ -23,10 +23,10 @@ Not for: couples, family groups, public creators, professional networks.
 ## 2. Success metrics
 
 
-| # | Hypothesis | Metric | Target |
-|---|------------|--------|--------|
-| H1 | People are willing to share small moments of their life if an AI asks them — rather than having to initiate it themselves | Prompt Completed / Prompt Sent | ≥ 60% |
-| H2 | Daily updates from friends are interesting enough to make users engage with the content | % DAU who liked or shared ≥ 1 card | ≥ 40% |
+| #   | Hypothesis                                                                                                                | Metric                             | Target |
+| --- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------ |
+| H1  | People are willing to share small moments of their life if an AI asks them — rather than having to initiate it themselves | Prompt Completed / Prompt Sent     | ≥ 60%  |
+| H2  | Daily updates from friends are interesting enough to make users engage with the content                                   | % DAU who liked or shared ≥ 1 card | ≥ 40%  |
 
 
 ---
@@ -278,11 +278,11 @@ Not for: couples, family groups, public creators, professional networks.
 ### North star charts
 
 
-| Chart                  | Hypothesis | Calculation                                                             | Events                                                            |
-| ---------------------- | ---------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Daily Engagement Rate  | H2         | `% of DAU who liked or shared ≥ 1 card` (rolling 7-day)                | Card Liked, Card Shared                                           |
-| Prompt Completion Rate | H1         | `count(Prompt Completed) / count(Prompt Sent)` per day                  | Prompt Completed, Push Sent                                       |
-| D7 Retention           | —          | `users with ≥1 session on day 7 / users installed on day 0`            | [Amplitude] Application Installed, [Amplitude] Application Opened |
+| Chart                  | Hypothesis | Calculation                                                 | Events                                                            |
+| ---------------------- | ---------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| Daily Engagement Rate  | H2         | `% of DAU who liked or shared ≥ 1 card` (rolling 7-day)     | Card Liked, Card Shared                                           |
+| Prompt Completion Rate | H1         | `count(Prompt Completed) / count(Prompt Sent)` per day      | Prompt Completed, Push Sent                                       |
+| D7 Retention           | —          | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
 
 
 ---
@@ -290,17 +290,17 @@ Not for: couples, family groups, public creators, professional networks.
 ### Supporting funnel charts
 
 
-| Chart                        | Purpose                                      | Calculation                                                                                              | Events                                                                                        |
-| ---------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Onboarding Funnel            | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
-| Friends Added (First 24h)    | Measure activation — is the graph seeded?    | `avg(Friend Request Accepted) per user in first 24h after Account Created`                               | Friend Request Accepted, Account Created                                                      |
-| Average Cards Available      | Is there enough content in the feed?         | `count(distinct card_id seen) / unique active users` per day                                             | Card Viewed                                                                                   |
-| Question → Card Conversion   | How much signal turns into a published card? | `count(Card Generated) / count(Prompt Completed)`                                                        | Prompt Completed, Card Generated (backend — to add)                                           |
-| Push Opt-in Rate             | Measure notification permission rate         | `Push Permission Completed (successful=true) / Push Permission Viewed`                                   | Push Permission Viewed, Push Permission Completed                                             |
-| New Users (Last 7 Days)      | Track acquisition pace                       | `count(Account Created)` rolling 7-day                                                                   | Account Created                                                                               |
-| Prompt Follow-up Rate        | Measure depth of exchange                    | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`                             | Prompt Completed                                                                              |
-| Card Interaction Breakdown   | Understand split of like vs share            | `count(Card Liked)` vs `count(Card Shared)` split by type                                                | Card Liked, Card Shared                                                                       |
-| Invite Link Share Rate       | Measure growth loop activation               | `count(Invite Link Shared) / DAU`                                                                        | Invite Link Shared                                                                            |
+| Chart                      | Purpose                                      | Calculation                                                                                             | Events                                                                                        |
+| -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Onboarding Funnel          | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Friends Added (First 24h)  | Measure activation — is the graph seeded?    | `avg(Friend Request Accepted) per user in first 24h after Account Created`                              | Friend Request Accepted, Account Created                                                      |
+| Average Cards Available    | Is there enough content in the feed?         | `count(distinct card_id seen) / unique active users` per day                                            | Card Viewed                                                                                   |
+| Question → Card Conversion | How much signal turns into a published card? | `count(Card Generated) / count(Prompt Completed)`                                                       | Prompt Completed, Card Generated (backend — to add)                                           |
+| Push Opt-in Rate           | Measure notification permission rate         | `Push Permission Completed (successful=true) / Push Permission Viewed`                                  | Push Permission Viewed, Push Permission Completed                                             |
+| New Users (Last 7 Days)    | Track acquisition pace                       | `count(Account Created)` rolling 7-day                                                                  | Account Created                                                                               |
+| Prompt Follow-up Rate      | Measure depth of exchange                    | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`                            | Prompt Completed                                                                              |
+| Card Interaction Breakdown | Understand split of like vs share            | `count(Card Liked)` vs `count(Card Shared)` split by type                                               | Card Liked, Card Shared                                                                       |
+| Invite Link Share Rate     | Measure growth loop activation               | `count(Invite Link Shared) / DAU`                                                                       | Invite Link Shared                                                                            |
 
 
 > `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
