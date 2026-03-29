@@ -1,12 +1,5 @@
 # DRAFT — Design Brief
 
-**For**: Marie
-**From**: Margaux & Aymeric
-**Date**: March 27, 2026
-**Scope**: MVP — 3 days of design work, starting Monday March 30
-
----
-
 ## What is DRAFT?
 
 DRAFT is a social app for close friend groups. An AI journalist talks to each person in the group, asks them questions about their life, and publishes AI-written cards in a shared feed — so everyone always knows what's going on with their friends, without anyone having to post.
@@ -62,7 +55,7 @@ The core of the app. Two things coexist on this screen:
 
 **The DRAFT question sheet (lives on top of the feed):**
 - A bottom sheet that opens when DRAFT has a question for you
-- Shows DRAFT's question and her avatar
+- Shows DRAFT's question and DRAFT's icon
 - Text input for the user to reply
 - Three states to design:
   - **Active** — DRAFT is waiting for your response
@@ -129,21 +122,12 @@ Cards are the heart of the product. A few things to keep in mind:
 
 ---
 
-## App name
-
-DRAFT is the codename. We're still deciding on the final name — we'll loop you in on that conversation. For now design with DRAFT.
-
-Two directions being considered:
-- A **first name** (like Frank) — creates a personality, people say "did you see what DRAFT wrote about me"
-- A **brand name** (like Twitter) — more magazine/editorial, people say "did you see their DRAFT"
-
----
-
 ## References
 
 - Frank (our health coach app) — for the conversational component and bottom sheet patterns
 - Newspaper / magazine editorial layouts — for card typography and feed structure
-- We have a Figma board with early explorations and Pinterest refs — sharing alongside this brief
+- Pinterest board: [ask Margaux for the link]
+- Figma explorations: [ask Margaux for the link]
 
 ---
 
