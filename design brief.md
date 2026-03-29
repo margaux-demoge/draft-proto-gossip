@@ -124,10 +124,9 @@ Cards are the heart of the product. A few things to keep in mind:
 
 ## References
 
-- Frank (our health coach app) — for the conversational component and bottom sheet patterns
 - Newspaper / magazine editorial layouts — for card typography and feed structure
-- Pinterest board: [ask Margaux for the link]
-- Figma explorations: [ask Margaux for the link]
+- Pinterest board: https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=85-2183&p=f&t=x3kP1ZRoiKk4vCE8-0
+- Figma explorations: https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=0-1&p=f&t=x3kP1ZRoiKk4vCE8-0
 
 ---
 
@@ -144,4 +143,4 @@ Cards are the heart of the product. A few things to keep in mind:
 
 ## Full product spec
 
-The complete product spec (flows, business rules, analytics) is in `spec.md` in the same folder as this brief. You don't need to read it end to end — this brief covers everything you need to start. The spec is there if you want to go deeper on any specific flow or edge case.
+The complete product spec is in `spec.md` in the same folder as this brief. You don't need to read it end to end — this brief covers everything you need to start. The spec is there if you want to go deeper on any specific flow or edge case.
