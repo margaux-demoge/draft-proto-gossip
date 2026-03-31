@@ -132,21 +132,34 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Business rules
 
-- [card generation] Card generation is fully decoupled from the exchange. The user never knows if their response will generate a card, when, or what it will say. The surprise is intentional and core to the product.
-- [card generation] The generation process starts 30 minutes after the user's first reply, not 30 minutes after DRAFT sent the question. If the user never replies, no generation is triggered from that exchange.
-- [card generation] DRAFT should try to generate at least 1 card per user per day using existing context, even if the user has not responded to any prompt that day.
-- [card generation] If a card is generated: a push notification is sent to the user's friends, and the card appears in their feed.
-- [card generation] If the input contains no signal (no named person, place, event, or emotional state with context): no card is generated and no feedback is given to the user.
-- [card generation] For MVP, cards are generated at any time of day. Future behaviour: cards are only published between 7am and 10:30pm. Responses received after 10:30pm trigger generation the next morning at 7am.
-- [card timestamp] A card's timestamp is always the moment it is created, regardless of when the user shared the underlying information.
-- [question system] For MVP, DRAFT selects a theme at random from the library. Each theme has an equal chance of being selected.
-- [question system] `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering.
-- [second prompt] If the user did not respond to the 9:47 prompt, the 18:12 prompt is still sent. DRAFT either follows up on the unanswered question in an intelligent way or proposes a different question. It is never a verbatim repeat.
-- [prompt continuity] DRAFT references previous exchanges when relevant. For example, the next day's prompt may open with a callback to what was discussed ("Yesterday you mentioned the Netflix thing — how did it go?") before moving to a new question. This builds trust and makes the interaction feel like a real conversation rather than a survey.
-- [check-in limit] Max 2 prompts per day per user.
-- [follow-up] There is no maximum number of follow-ups. The exchange stays open until the user stops responding. See `[CLARIFY]` in §8 for the trigger that tells DRAFT to stop and generate.
-- [offline] If the user submits while offline: the response is stored locally with a "pending" status visible to the user.
-- [bottom sheet states] The DRAFT question sheet has four distinct states:
+**Card generation**
+- Card generation is fully decoupled from the exchange. The user never knows if their response will generate a card, when, or what it will say. The surprise is intentional and core to the product.
+- The generation process starts 30 minutes after the user's first reply, not 30 minutes after DRAFT sent the question. If the user never replies, no generation is triggered from that exchange.
+- DRAFT should try to generate at least 1 card per user per day using existing context, even if the user has not responded to any prompt that day.
+- If a card is generated: a push notification is sent to the user's friends, and the card appears in their feed.
+- If the input contains no signal (no named person, place, event, or emotional state with context): no card is generated and no feedback is given to the user.
+- For MVP, cards are generated at any time of day. Future behaviour: cards are only published between 7am and 10:30pm. Responses received after 10:30pm trigger generation the next morning at 7am.
+
+**Card timestamp**
+- A card's timestamp is always the moment it is created, regardless of when the user shared the underlying information.
+
+**Question system**
+- For MVP, DRAFT selects a theme at random from the library. Each theme has an equal chance of being selected.
+- `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering.
+
+**Prompts**
+- If the user did not respond to the 9:47 prompt, the 18:12 prompt is still sent. DRAFT either follows up on the unanswered question in an intelligent way or proposes a different question. It is never a verbatim repeat.
+- DRAFT references previous exchanges when relevant. For example, the next day's prompt may open with a callback to what was discussed ("Yesterday you mentioned the Netflix thing — how did it go?") before moving to a new question. This builds trust and makes the interaction feel like a real conversation rather than a survey.
+- Max 2 prompts per day per user.
+
+**Follow-up**
+- There is no maximum number of follow-ups. The exchange stays open until the user stops responding. See `[CLARIFY]` in §8 for the trigger that tells DRAFT to stop and generate.
+
+**Offline**
+- If the user submits while offline: the response is stored locally with a "pending" status visible to the user.
+
+**Bottom sheet states**
+- The DRAFT question sheet has four distinct states:
   (a) Minimized / active — DRAFT has a question waiting. Small bar with a glow or badge effect. Label: "DRAFT has a question for you." No message preview shown.
   (b) Open — Full bottom sheet with the chat interface. Reuse the Frank/Orai chat component (text, voice, image input supported).
   (c) Minimized / processing — User replied and dismissed the sheet while DRAFT is generating. Small bar shows "DRAFT is writing…". Transitions back to (a) active once ready.
@@ -179,16 +192,25 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Business rules
 
-- [social graph] Friendship is mutual and symmetric. Both users must accept the connection before either can see the other's cards. If either user removes the friendship, both lose access to each other's content immediately.
-- [visibility] A card is visible to all confirmed friends of its subject.
-- [visibility] For MVP, a card always has exactly one subject. Other first names may appear in the body text, but only the subject's profile photo and name are displayed on the card.
-- [own cards] The user sees their own cards in the feed exactly as others do. They will recognise their own photo and name. No special layout or pinning.
-- [own cards] If the user has zero friends, their own cards are visible only to themselves. Empty state prompts them to invite people.
-- [content window] The feed shows the last 48 hours of cards. Not a calendar day. Rolling 48-hour window.
-- [data retention] Card data is never deleted from the server. Cards are only hidden from the feed after 48h.
-- [likes] Like count is visible to all users. Who liked is not shown in MVP.
-- [likes] Tapping like on a card that the user has already liked removes the like (toggle behaviour).
-- [likes] When a friend likes a card the user is mentioned in, a push notification is sent: "[Friend name] liked a post you are mentioned in."
+**Social graph**
+- Friendship is mutual and symmetric. Both users must accept the connection before either can see the other's cards. If either user removes the friendship, both lose access to each other's content immediately.
+
+**Visibility**
+- A card is visible to all confirmed friends of its subject.
+- For MVP, a card always has exactly one subject. Other first names may appear in the body text, but only the subject's profile photo and name are displayed on the card.
+
+**Own cards**
+- The user sees their own cards in the feed exactly as others do. They will recognise their own photo and name. No special layout or pinning.
+- If the user has zero friends, their own cards are visible only to themselves. Empty state prompts them to invite people.
+
+**Content window**
+- The feed shows the last 48 hours of cards. Not a calendar day. Rolling 48-hour window.
+- Card data is never deleted from the server. Cards are only hidden from the feed after 48h.
+
+**Likes**
+- Like count is visible to all users. Who liked is not shown in MVP.
+- Tapping like on a card that the user has already liked removes the like (toggle behaviour).
+- When a friend likes a card the user is mentioned in, a push notification is sent: "[Friend name] liked a post you are mentioned in."
 
 #### Error paths & edge cases
 
@@ -218,10 +240,15 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Business rules
 
-- [removal] Deletion is silent. Friends see the card disappear with no explanation or notification.
-- [quality signal] The card_removed rate is tracked in analytics as a proxy for content quality.
-- [permissions] Users can remove only cards where they are the subject. They cannot modify cards about other people.
-- [report] All users can report any card via the 3-dots menu. Required by Apple for UGC apps.
+**Removal**
+- Deletion is silent. Friends see the card disappear with no explanation or notification.
+- The card_removed rate is tracked in analytics as a proxy for content quality.
+
+**Permissions**
+- Users can remove only cards where they are the subject. They cannot modify cards about other people.
+
+**Report**
+- All users can report any card via the 3-dots menu. Required by Apple for UGC apps.
 
 #### Error paths & edge cases
 
@@ -246,10 +273,17 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Business rules
 
-- [friend requests] There is no in-app search for users. Friends are added exclusively via invite link, QR code, or friend suggestions.
-- [friend suggestions] The friend suggestions section appears once the user has at least one confirmed friend. It shows friends of friends only — no other discovery logic for MVP. Results are deduped. Ordering is by simplest available signal (e.g. account creation date). Tapping "Add as friend" sends a friend request and the button enters a "Pending" state.
-- [share CTA] The top of the friend management screen always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome card and keeps the growth loop accessible at all times.
-- [removal] Friendship removal is symmetric and immediate. Neither user sees the other's cards after removal.
+**Friend requests**
+- There is no in-app search for users. Friends are added exclusively via invite link, QR code, or friend suggestions.
+
+**Friend suggestions**
+- The friend suggestions section appears once the user has at least one confirmed friend. It shows friends of friends only — no other discovery logic for MVP. Results are deduped. Ordering is by simplest available signal (e.g. account creation date). Tapping "Add as friend" sends a friend request and the button enters a "Pending" state.
+
+**Share CTA**
+- The top of the friend management screen always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome card and keeps the growth loop accessible at all times.
+
+**Removal**
+- Friendship removal is symmetric and immediate. Neither user sees the other's cards after removal.
 
 #### Error paths & edge cases
 
@@ -272,10 +306,13 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Business rules
 
-- [settings content] Profile: Name (editable), Profile photo (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
-- [profile editing] There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
-- [component] Reuse the generic Amon settings component already used in Orai and Frank.
-- [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all friends' feeds immediately. The user's friends are not notified.
+**Settings content**
+- Profile: Name (editable), Profile photo (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
+- Reuse the generic Amon settings component already used in Orai and Frank.
+
+**Delete account**
+- Account deletion is permanent and irreversible. All cards authored by the user are removed from all friends' feeds immediately. The user's friends are not notified.
 
 #### Error paths & edge cases
 
