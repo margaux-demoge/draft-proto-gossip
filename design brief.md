@@ -119,6 +119,7 @@ Cards are the heart of the product. A few things to keep in mind:
 - Text-only in MVP (no photos, music, location)
 - Should feel shareable — simple, typographically clean, strong enough to screenshot and send to a friend
 - Cards to design: standard card, welcome card ("[Name] just joined DRAFT!" with QR code + share CTA)
+- Shareable image export: when a card is shared via the iOS share sheet, the exported image must include visible DRAFT branding (logo + app name) so that people who see it on WhatsApp or Instagram can identify and download the app. The image must be self-contained and sleek — it should look good without any surrounding UI.
 
 ---
 

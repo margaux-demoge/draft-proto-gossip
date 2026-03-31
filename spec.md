@@ -37,6 +37,7 @@ Not for: couples, family groups, public creators, professional networks.
 
 - No authentication: account created automatically on device at first launch
 - Minimal onboarding: name, age, gender, push permission only
+- Profile photo: user uploads or takes a photo during onboarding
 - Welcome card on first session: "[Name] just joined DRAFT!" with QR code and share link
 - DRAFT's first question opens as a bottom sheet immediately on home feed arrival
 - AI-generated cards published throughout the day, based on conversations with DRAFT
@@ -53,6 +54,7 @@ Not for: couples, family groups, public creators, professional networks.
 - User-initiated input (DRAFT always initiates)
 - Data integrations (Spotify, Apple Health, Photos, Calendar)
 - In-app messaging
+- Friend search, contact scan, and intelligent friend suggestions. For MVP, groups are onboarded together via the ambassador programme — no in-app discovery needed.
 - Sub-group scoping
 - Weekly digest or newspaper format
 - Public profiles or discovery
@@ -81,24 +83,36 @@ Not for: couples, family groups, public creators, professional networks.
 2. **Name**: The user enters their first name so DRAFT can personalise cards and questions from day one.
 3. **Age**: The user enters their age. Used by DRAFT to calibrate question tone and relevance.
 4. **Gender**: The user selects their gender. Used by DRAFT to personalise questions and card writing.
-5. **Push permission**: Explain why notifications matter before triggering the native iOS prompt, so the user grants permission with context.
-6. **Home feed**: The user lands on their feed. A welcome card is already present: "[Name] just joined DRAFT!" with a QR code and a "Share your link" CTA. DRAFT's first question opens immediately as a bottom sheet over the feed.
+5. **Profile photo**: The user uploads or takes a profile photo. Used to attribute cards in the feed and friend lists.
+6. **Push permission**: Explain why notifications matter before triggering the native iOS prompt, so the user grants permission with context.
+7. **Home feed**: The user lands on their feed. A welcome card is already present: "[Name] just joined DRAFT!" with a QR code and a "Share your link" CTA. DRAFT's first question opens immediately as a bottom sheet over the feed.
 
 #### Business rules
 
-- [account] No sign-up or authentication required. An account is created automatically on the device at first launch. `[CLARIFY]` Account persistence: if the user deletes and reinstalls the app or switches devices, they lose their account. What is the acceptable MVP strategy — accept the loss, or store a device token server-side? To validate with engineering.
-- [welcome card] The welcome card "[Name] just joined DRAFT!" is generated immediately on account creation, before the user reaches the home feed. It contains a QR code linking to the user's personal invite link and a "Share your link" CTA. Its purpose is to seed the growth loop from the very first session.
-- [welcome card] The welcome card persists permanently in the feed as a regular chronological post. It is not pinned and does not disappear when friends are added.
-- [first question] DRAFT's first question appears as a bottom sheet over the home feed immediately on first arrival. It does not wait for the scheduled 9:47 or 18:12 prompt window.
-- [first question] The first question is drawn from the theme library like any other daily prompt, but is chosen to be open-ended enough to work without any prior user context.
-- [friend graph] Friends are not added during onboarding. They are added later via the share link, QR code, or contact discovery. The onboarding funnel does not include a friend discovery step.
-- [growth] The primary acquisition mechanic for MVP is ambassador-driven: groups of friends are onboarded together via an external programme. The in-app share link and QR code support and reinforce this.
+**Account**
+- No sign-up or authentication required. An account is created automatically on the device at first launch.
+- If the user deletes and reinstalls the app, their account is preserved (same strategy as Orai — device token stored server-side).
+- If the user switches devices, their account is lost. This is acceptable for MVP.
+
+**Welcome card**
+- The welcome card "[Name] just joined DRAFT!" is generated immediately on account creation, before the user reaches the home feed. It contains a QR code linking to the user's personal invite link and a "Share your link" CTA. Its purpose is to seed the growth loop from the very first session.
+- The welcome card is visible only to the user themselves — friends do not see it. It disappears from the feed after 48h, like any other card.
+
+**First question**
+- DRAFT's first question appears as a bottom sheet over the home feed immediately on first arrival. It does not wait for the scheduled 9:47 or 18:12 prompt window.
+- The first question is drawn from a dedicated onboarding question list (not the regular theme library). See `[CLARIFY]` in §8.
+
+**Friend graph**
+Friends are not added during onboarding. They are added later via the share link, QR code, or contact discovery. The onboarding funnel does not include a friend discovery step.
+
+**Growth**
+The primary acquisition mechanic for MVP is ambassador-driven: groups of friends are onboarded together via an external programme. The in-app share link and QR code support and reinforce this.
 
 #### Error paths & edge cases
 
 - User quits mid-onboarding → resume from the last completed step on next launch
-- User skips push permission → they can still use the app but will not receive prompt notifications; an in-app nudge is shown later
-- Welcome card QR code or share link fails to generate → show the card without the QR code with a retry button
+- User skips push permission → they can still use the app but will not receive prompt notifications. Every 24h, a full-screen skippable screen (reusing Frank's implementation) explains why notifications matter, with a CTA that redirects to iOS Settings > DRAFT > Notifications.
+- User creates account and receives the onboarding first question → no scheduled prompt (9:47 / 18:12) is sent if the user already received a prompt in the last 4 hours
 
 ---
 
@@ -110,10 +124,10 @@ Not for: couples, family groups, public creators, professional networks.
 
 #### Steps
 
-1. **Push notification**: DRAFT sends a notification that feels like a message from a friend, not a survey prompt. It builds curiosity or references something from a previous exchange before surfacing a question. The question is never stated directly in the notification. `[CLARIFY]` Exact push notification copy examples to be written before build — owner: Aymeric.
-2. **DRAFT question sheet**: A bottom sheet opens over the feed showing DRAFT's question and her avatar. The user sees the question in full before deciding whether to answer.
+1. **Push notification**: DRAFT sends a notification that feels like a message from a friend, not a survey prompt. It builds curiosity or references something from a previous exchange before surfacing a question. The question is never stated directly in the notification. `[CLARIFY]` Exact push notification copy examples to be written before build — owner: Margaux.
+2. **DRAFT question sheet**: A bottom sheet opens over the feed showing DRAFT's question. The user sees the question in full before deciding whether to answer.
 3. **User reply**: The user types a free-text response.
-4. **Follow-up** (optional): DRAFT may ask one follow-up question to get more detail. The user can answer or dismiss; both close the active exchange.
+4. **Follow-up**: DRAFT continues asking follow-up questions to gather more context. The user can stop replying at any time. There is no artificial limit on the number of follow-ups. See `[CLARIFY]` in §8 for the stopping trigger.
 5. **Sheet closes**: The exchange is complete from the user's perspective. No loading, no indication of what happens next. DRAFT processes the response in the background.
 
 #### Business rules
@@ -121,20 +135,22 @@ Not for: couples, family groups, public creators, professional networks.
 - [card generation] Card generation is fully decoupled from the exchange. The user never knows if their response will generate a card, when, or what it will say. The surprise is intentional and core to the product.
 - [card generation] The generation process starts 30 minutes after the user's first reply, not 30 minutes after DRAFT sent the question. If the user never replies, no generation is triggered from that exchange.
 - [card generation] DRAFT should try to generate at least 1 card per user per day using existing context, even if the user has not responded to any prompt that day.
-- [card generation] If a card is generated: a push notification is sent to the user's followers, and the card appears in their feed.
+- [card generation] If a card is generated: a push notification is sent to the user's friends, and the card appears in their feed.
 - [card generation] If the input contains no signal (no named person, place, event, or emotional state with context): no card is generated and no feedback is given to the user.
 - [card generation] For MVP, cards are generated at any time of day. Future behaviour: cards are only published between 7am and 10:30pm. Responses received after 10:30pm trigger generation the next morning at 7am.
 - [card timestamp] A card's timestamp is always the moment it is created, regardless of when the user shared the underlying information.
-- [question system] DRAFT selects a theme from a hardcoded library of 10–30 themes (e.g. weekend plans, current music, upcoming events). She then generates a unique question tailored to that specific user based on everything she knows about them: onboarding context, previous exchanges, and history of cards written about them and their friends.
-- [question system] `[CLARIFY]` What is the full list of themes in the library? Must be written before build.
-- [question system] `[CLARIFY]` What is the selection logic: random theme, or contextually chosen based on recency and user profile?
+- [question system] For MVP, DRAFT selects a theme at random from the library. Each theme has an equal chance of being selected.
 - [question system] `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering.
 - [second prompt] If the user did not respond to the 9:47 prompt, the 18:12 prompt is still sent. DRAFT either follows up on the unanswered question in an intelligent way or proposes a different question. It is never a verbatim repeat.
 - [prompt continuity] DRAFT references previous exchanges when relevant. For example, the next day's prompt may open with a callback to what was discussed ("Yesterday you mentioned the Netflix thing — how did it go?") before moving to a new question. This builds trust and makes the interaction feel like a real conversation rather than a survey.
 - [check-in limit] Max 2 prompts per day per user.
-- [follow-up] Max 1 follow-up question from DRAFT. The exchange closes after that regardless.
+- [follow-up] There is no maximum number of follow-ups. The exchange stays open until the user stops responding. See `[CLARIFY]` in §8 for the trigger that tells DRAFT to stop and generate.
 - [offline] If the user submits while offline: the response is stored locally with a "pending" status visible to the user.
-- [bottom sheet states] `[CLARIFY]` The DRAFT question sheet has at least three distinct states that need to be designed: (a) active — DRAFT is waiting for a response; (b) processing — the user has just replied and DRAFT is doing her thing (some equivalent of "DRAFT is writing…"); (c) idle — nothing to do right now, waiting for the next scheduled prompt. Each state needs a defined UI treatment before build. It is auto-sent when the connection is restored. If sending fails repeatedly, a red error indicator is shown with an option to retry. Reuse the same implementation as Orai and Frank.
+- [bottom sheet states] The DRAFT question sheet has four distinct states:
+  (a) Minimized / active — DRAFT has a question waiting. Small bar with a glow or badge effect. Label: "DRAFT has a question for you." No message preview shown.
+  (b) Open — Full bottom sheet with the chat interface. Reuse the Frank/Orai chat component (text, voice, image input supported).
+  (c) Minimized / processing — User replied and dismissed the sheet while DRAFT is generating. Small bar shows "DRAFT is writing…". Transitions back to (a) active once ready.
+  (d) Minimized / idle — Nothing to do right now. Small bar in a subdued/disabled state, waiting for the next scheduled prompt.
 
 #### Error paths & edge cases
 
@@ -157,7 +173,7 @@ Not for: couples, family groups, public creators, professional networks.
 2. **Pull-to-refresh**: The user pulls down to refresh the feed and load new cards published since last open.
 3. **Scrolling**: As the user scrolls, cards enter the viewport. A card is marked as viewed after 1 continuous second of at least 50% visibility.
 4. **Like**: The user taps the like button on a card. The like count is visible to all users.
-5. **Share**: The user taps the share button on a card to open the iOS native share sheet. The card is exported as an image. `[CLARIFY]` Explore technical feasibility of a link with automatic card preview instead of or in addition to the image.
+5. **Share**: The user taps the share button on a card to open the iOS native share sheet. The card is exported as an image.
 6. **3-dots menu**: The user taps the 3-dots button on any card to open a context menu. Options depend on whether the card is about themselves or someone else (see Card moderation flow).
 7. **New activity bubble**: When new cards are published while the user is in the app, a floating bubble appears at the bottom. Tapping it refreshes the feed and scrolls to the top.
 
@@ -165,12 +181,14 @@ Not for: couples, family groups, public creators, professional networks.
 
 - [social graph] Friendship is mutual and symmetric. Both users must accept the connection before either can see the other's cards. If either user removes the friendship, both lose access to each other's content immediately.
 - [visibility] A card is visible to all confirmed friends of its subject.
-- [visibility] If a card mentions multiple people, all mentioned users also see it in their feed, regardless of whether they follow each other.
+- [visibility] For MVP, a card always has exactly one subject. Other first names may appear in the body text, but only the subject's profile photo and name are displayed on the card.
 - [own cards] The user sees their own cards in the feed exactly as others do. They will recognise their own photo and name. No special layout or pinning.
 - [own cards] If the user has zero friends, their own cards are visible only to themselves. Empty state prompts them to invite people.
 - [content window] The feed shows the last 48 hours of cards. Not a calendar day. Rolling 48-hour window.
 - [data retention] Card data is never deleted from the server. Cards are only hidden from the feed after 48h.
 - [likes] Like count is visible to all users. Who liked is not shown in MVP.
+- [likes] Tapping like on a card that the user has already liked removes the like (toggle behaviour).
+- [likes] When a friend likes a card the user is mentioned in, a push notification is sent: "[Friend name] liked a post you are mentioned in."
 
 #### Error paths & edge cases
 
@@ -184,33 +202,29 @@ Not for: couples, family groups, public creators, professional networks.
 
 **Trigger**: User taps the 3-dots button on a card.
 
-**End state for own card**: The card is either corrected (regenerated by DRAFT) or removed from all followers' feeds.
+**End state for own card**: The card is removed from all friends' feeds.
 
 **End state for another person's card**: The report is submitted.
 
 #### Steps (own card — user is the subject)
 
-1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "This is wrong", "Remove this card", and Cancel.
-
-2a. **"This is wrong"**: A text field opens pre-filled with the card's current content. The user edits the inaccurate part and submits the correction to DRAFT.
-2b. **"Remove this card"**: A confirmation dialog asks the user to confirm removal. On confirm, the card is immediately deleted from all followers' feeds.
+1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "Remove this card" and Cancel.
+2. **"Remove this card"**: A confirmation dialog asks the user to confirm removal. On confirm, the card is immediately deleted from all friends' feeds.
 
 #### Steps (another person's card)
 
 1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "Report" and Cancel.
-2. **Report**: `[CLARIFY]` Report categories and handling process to be defined. Required by Apple App Store guidelines for UGC apps.
+2. **Report**: The report is submitted immediately — no category selection required. A `Content Reported` analytics event is fired (card_id + associated data) for manual team review. A confirmation modal is shown: "Thanks, our team will review this quickly."
 
 #### Business rules
 
-- [correction] DRAFT regenerates the card using the corrected input. The updated card replaces the original in all followers' feeds.
 - [removal] Deletion is silent. Friends see the card disappear with no explanation or notification.
-- [permissions] Users can correct or remove only cards where they are the subject. They cannot modify cards about other people.
+- [quality signal] The card_removed rate is tracked in analytics as a proxy for content quality.
+- [permissions] Users can remove only cards where they are the subject. They cannot modify cards about other people.
 - [report] All users can report any card via the 3-dots menu. Required by Apple for UGC apps.
-- `[CLARIFY]` How does the user indicate what is wrong? Do they edit the full card as free text, or is there a more structured correction flow? Must be defined before building the moderation UI.
 
 #### Error paths & edge cases
 
-- Correction submitted but DRAFT fails to regenerate → remove the card silently and notify the user: "DRAFT couldn't rewrite this one. The card has been removed."
 - User taps Cancel → menu closes, no action taken, no event fired
 
 ---
@@ -223,16 +237,17 @@ Not for: couples, family groups, public creators, professional networks.
 
 #### Steps
 
-1. **Friend management screen**: A single screen with two sections. At the top: pending friend requests with Accept and Reject actions. Below: the user's current friend list with a Remove option per friend.
+1. **Friend management screen**: A single screen with three sections: (1) pending friend requests, (2) current friend list, (3) friend suggestions.
 2. **At the top of the screen**: A persistent CTA to share the user's invite link or display their QR code, so they can grow their friend list at any time.
 3. **Accept request**: The requesting user is added as a mutual friend immediately. Both users now see each other's cards.
 4. **Reject request**: The request is removed silently. The requesting user is not notified.
 5. **Remove friend**: A confirmation prompt before removal. Both users immediately lose access to each other's cards.
+6. **Friend suggestions**: Shown below the friend list once the user has ≥ 1 confirmed friend. Displays friends of friends (deduped). Tapping "Add as friend" sends a request and the button switches to a "Pending" state.
 
 #### Business rules
 
 - [friend requests] There is no in-app search for users. Friends are added exclusively via invite link, QR code, or friend suggestions.
-- [friend suggestions] Once a user has at least one confirmed friend, they see suggestions based on mutual friends. `[CLARIFY]` Friend suggestion friction: in a party setting, each person still needs to individually send and accept requests, even with suggestions visible. This adds significant friction when trying to connect a large group quickly. A solution (e.g. group QR code, batch add) needs to be explored before the first test cohort.
+- [friend suggestions] The friend suggestions section appears once the user has at least one confirmed friend. It shows friends of friends only — no other discovery logic for MVP. Results are deduped. Ordering is by simplest available signal (e.g. account creation date). Tapping "Add as friend" sends a friend request and the button enters a "Pending" state.
 - [share CTA] The top of the friend management screen always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome card and keeps the growth loop accessible at all times.
 - [removal] Friendship removal is symmetric and immediate. Neither user sees the other's cards after removal.
 
@@ -260,7 +275,7 @@ Not for: couples, family groups, public creators, professional networks.
 - [settings content] Profile: Name (editable), Profile photo (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
 - [profile editing] There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
 - [component] Reuse the generic Amon settings component already used in Orai and Frank.
-- [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all followers' feeds immediately. The user's friends are not notified.
+- [delete account] Account deletion is permanent and irreversible. All cards authored by the user are removed from all friends' feeds immediately. The user's friends are not notified.
 
 #### Error paths & edge cases
 
@@ -424,26 +439,21 @@ TBD when flows are ready.
 
 **Must be resolved before build**
 
-- `[CLARIFY]` Theme library: the full list of 10–30 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. — owner: Aymeric
-- `[CLARIFY]` Theme selection logic: random, or contextually chosen based on recency and user profile? — owner: Aymeric + engineering
-- `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering. — owner: engineering
-- `[CLARIFY]` Push notification copy strategy: first notification should feel like a personal message from DRAFT (not a direct question), referencing past context. Exact copy and format to be defined. — owner: Aymeric
-- `[CLARIFY]` Card data structure: headline + body text? Multiple card types? Author display format ("DRAFT" vs "DRAFT on [Name]")? Must be defined before back-end build. — owner: Aymeric + engineering
-- `[CLARIFY]` Tone of voice: DRAFT's copy register, level of humour, and how she writes about people. Must be defined before front-end build. — owner: Aymeric
-- `[CLARIFY]` Card moderation UI: does the user edit the full card as free text, or is there a more structured correction flow? — owner: Aymeric
-- `[CLARIFY]` Report flow: categories and handling process. Required by Apple App Store guidelines for UGC apps. — owner: Aymeric + engineering
-- `[CLARIFY]` Card share format: MVP is an image via iOS share sheet. Explore whether a link with automatic card preview is technically feasible. — owner: engineering
+- `[CLARIFY]` Theme library: the full list of 10–30 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. — owner: Margaux
+- `[CLARIFY]` Push notification copy: first notification should feel like a personal message from DRAFT (not a direct question), referencing past context. Exact copy and format to be defined. — owner: Margaux
+- `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing cards is already defined in §5.) Must be defined before front-end build. — owner: Margaux
+- `[CLARIFY]` Onboarding question list: a dedicated set of questions for the first onboarding exchange must be written. Each question should be specific enough that a single reply generates a card. Must include party-context variants (e.g. "How are you planning to end the night?"). — owner: Aymeric
+- `[CLARIFY]` Follow-up stopping trigger: define the signal or rule that tells DRAFT to stop asking follow-ups and begin generating the card. — owner: Aymeric + engineering
 
 **Engineering validation required**
 
-- `[CLARIFY]` Account persistence: no auth in MVP means if user deletes and reinstalls or switches devices, they lose their account. What is the acceptable strategy for MVP? (Accept the loss, or store a device token server-side?) — owner: engineering
+- `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering. — owner: engineering
 - `[CLARIFY]` Deferred deep linking: technical complexity to validate with Florian and Romain before committing to MVP. — owner: engineering
-- `[CLARIFY]` Friend discovery MVP implementation: contacts scan + username search + share link confirmed in principle, but simplest MVP approach needs an engineering brainstorm. — owner: Aymeric + engineering
 
 **Risks**
 
 - `[RISK]` Card quality is the core bet. If DRAFT's output feels generic or inaccurate, the input loop breaks. Mitigation: run manual prompt tests with real users before automating card generation.
-- `[RISK]` Cold start: a user with zero followers sees very little. For the test phase, cohorts must include 5–6 people who know each other and onboard together. This is a hard requirement for the first test, not a nice-to-have.
+- `[RISK]` Cold start: a user with zero friends sees very little. For the test phase, cohorts must include 5–6 people who know each other and onboard together. This is a hard requirement for the first test, not a nice-to-have.
 
 **Assumptions**
 
