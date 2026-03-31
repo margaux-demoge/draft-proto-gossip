@@ -36,8 +36,7 @@ Not for: couples, family groups, public creators, professional networks.
 **In MVP**
 
 - No authentication: account created automatically on device at first launch
-- Minimal onboarding: name, age, gender, push permission only
-- Profile photo: user uploads or takes a photo during onboarding
+- Minimal onboarding: name, age, gender, profile photo, push permission
 - Welcome card on first session: "[Name] just joined DRAFT!" with QR code and share link
 - DRAFT's first question opens as a bottom sheet immediately on home feed arrival
 - AI-generated cards published throughout the day, based on conversations with DRAFT
@@ -54,7 +53,7 @@ Not for: couples, family groups, public creators, professional networks.
 - User-initiated input (DRAFT always initiates)
 - Data integrations (Spotify, Apple Health, Photos, Calendar)
 - In-app messaging
-- Friend search, contact scan, and intelligent friend suggestions. For MVP, groups are onboarded together via the ambassador programme — no in-app discovery needed.
+- Friend search, contact scan, and algorithmic friend suggestions (e.g. based on contacts or location). For MVP, groups are onboarded together via the ambassador programme. Basic mutual-friend suggestions (friends of friends) are included in MVP.
 - Sub-group scoping
 - Weekly digest or newspaper format
 - Public profiles or discovery
@@ -103,7 +102,7 @@ Not for: couples, family groups, public creators, professional networks.
 - The first question is drawn from a dedicated onboarding question list (not the regular theme library). See `[CLARIFY]` in §8.
 
 **Friend graph**
-Friends are not added during onboarding. They are added later via the share link, QR code, or contact discovery. The onboarding funnel does not include a friend discovery step.
+Friends are not added during onboarding. They are added later via the share link or QR code. The onboarding funnel does not include a friend discovery step.
 
 **Growth**
 The primary acquisition mechanic for MVP is ambassador-driven: groups of friends are onboarded together via an external programme. The in-app share link and QR code support and reinforce this.
@@ -124,11 +123,11 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Steps
 
-1. **Push notification**: DRAFT sends a notification that feels like a message from a friend, not a survey prompt. It builds curiosity or references something from a previous exchange before surfacing a question. The question is never stated directly in the notification. `[CLARIFY]` Exact push notification copy examples to be written before build — owner: Margaux.
+1. **Push notification**: DRAFT sends a notification that feels like a message from a friend, not a survey prompt. It builds curiosity or references something from a previous exchange before surfacing a question. The question is never stated directly in the notification. Tapping the notification opens the app and immediately opens the chat bottom sheet in its active state. `[CLARIFY]` Exact push notification copy examples to be written before build — owner: Margaux.
 2. **DRAFT question sheet**: A bottom sheet opens over the feed showing DRAFT's question. The user sees the question in full before deciding whether to answer.
-3. **User reply**: The user types a free-text response.
+3. **User reply**: The user replies via text, voice, or image (reusing the Frank/Orai chat component).
 4. **Follow-up**: DRAFT continues asking follow-up questions to gather more context. The user can stop replying at any time. There is no artificial limit on the number of follow-ups. See `[CLARIFY]` in §8 for the stopping trigger.
-5. **Sheet closes**: The exchange is complete from the user's perspective. No loading, no indication of what happens next. DRAFT processes the response in the background.
+5. **Sheet closes**: The user stops responding and dismisses the sheet. No loading, no indication of what happens next. DRAFT processes the exchange in the background and decides independently whether to generate a card.
 
 #### Business rules
 
@@ -214,7 +213,7 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 #### Error paths & edge cases
 
-- Feed empty, no follows → empty state with invite nudge
+- Feed empty, no friends → empty state with invite nudge
 - Feed empty, follows present but no cards yet → "DRAFT is still gathering intel. Check back soon."
 - Offline → cached feed shown with an "Offline" banner, like and share buttons disabled
 
@@ -224,7 +223,7 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 **Trigger**: User taps the 3-dots button on a card.
 
-**End state for own card**: The card is removed from all friends' feeds.
+**End state for own card**: The card is removed from all feeds where it was visible (the user's own feed and all their friends' feeds).
 
 **End state for another person's card**: The report is submitted.
 
@@ -260,7 +259,7 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 **Trigger**: User taps the friends icon or navigates to the friend management screen.
 
-**End state**: User has reviewed pending friend requests and their current friend list.
+**End state**: User has reviewed pending friend requests, their current friend list, and friend suggestions.
 
 #### Steps
 
@@ -419,7 +418,7 @@ DRAFT picks a style at random — each of the four styles has an equal 25% chanc
 
 | Chart                      | Purpose                                      | Calculation                                                                                             | Events                                                                                        |
 | -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Onboarding Funnel          | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Onboarding Funnel          | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Profile Photo → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
 | Friends Added (First 24h)  | Measure activation — is the graph seeded?    | `avg(Friend Request Accepted) per user in first 24h after Account Created`                              | Friend Request Accepted, Account Created                                                      |
 | Average Cards Available    | Is there enough content in the feed?         | `count(distinct card_id seen) / unique active users` per day                                            | Card Viewed                                                                                   |
 | Question → Card Conversion | How much signal turns into a published card? | `count(Card Generated) / count(Prompt Completed)`                                                       | Prompt Completed, Card Generated (backend — to add)                                           |
@@ -452,7 +451,7 @@ Events shared with Frank and Orai. Reuse the existing Amplitude schema as-is —
 | [Amplitude] Application Updated      | —            | ios     | Auto-tracked by Amplitude SDK                                                                         |
 | Account Created                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                          |
 | Account Deleted                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                          |
-| Onboarding Step Viewed               | Amon Default | ios     | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, push_permission`        |
+| Onboarding Step Viewed               | Amon Default | ios     | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, profile_photo, push_permission`        |
 | Onboarding Step Completed            | Amon Default | ios     | Same as above for `step_name`                                                                         |
 | Push Permission Viewed               | Amon Default | ios     | Identical to Frank                                                                                    |
 | Push Permission Completed            | Amon Default | ios     | Identical to Frank                                                                                    |
@@ -481,6 +480,7 @@ TBD when flows are ready.
 - `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing cards is already defined in §5.) Must be defined before front-end build. — owner: Margaux
 - `[CLARIFY]` Onboarding question list: a dedicated set of questions for the first onboarding exchange must be written. Each question should be specific enough that a single reply generates a card. Must include party-context variants (e.g. "How are you planning to end the night?"). — owner: Aymeric
 - `[CLARIFY]` Follow-up stopping trigger: define the signal or rule that tells DRAFT to stop asking follow-ups and begin generating the card. — owner: Aymeric + engineering
+- `[CLARIFY]` Prompt specification: create a dedicated section in the spec to list and describe all prompt types (daily prompts, onboarding question, follow-ups), their exact behaviour, and the rules governing when each fires. — owner: Aymeric
 
 **Engineering validation required**
 

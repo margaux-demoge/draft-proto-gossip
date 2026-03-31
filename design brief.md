@@ -55,12 +55,13 @@ The core of the app. Two things coexist on this screen:
 
 **The DRAFT question sheet (lives on top of the feed):**
 - A bottom sheet that opens when DRAFT has a question for you
-- Shows DRAFT's question and DRAFT's icon
+- Shows DRAFT's question (no avatar — DRAFT is not a personified character)
 - Text input for the user to reply
-- Three states to design:
-  - **Active** — DRAFT is waiting for your response
-  - **Processing** — you just replied, DRAFT is doing her thing ("DRAFT is writing…")
-  - **Idle** — nothing to do right now, waiting for the next prompt
+- Four states to design:
+  - **Active (minimized)** — DRAFT has a question waiting. Small bar with a glow/badge effect. Label: "DRAFT has a question for you." No message preview.
+  - **Open** — full bottom sheet with the chat interface
+  - **Processing (minimized)** — user replied and dismissed the sheet while DRAFT is generating. Small bar shows "DRAFT is writing…". Transitions back to active once ready.
+  - **Idle (minimized)** — nothing to do right now, waiting for the next scheduled prompt. Subdued/disabled appearance.
 - Sheet is dismissible, but answering is the main CTA
 
 ### 3. Onboarding (Wednesday)
@@ -81,7 +82,7 @@ No sign-up, no account creation, no friend discovery during onboarding. Friends 
 Lower priority — can be picked up the following week if needed.
 
 **Friends screen:**
-- Two sections: pending requests (accept / reject) + current friends list (remove)
+- Three sections: pending requests (accept / reject) + current friends list (remove) + friend suggestions (friends of friends, "Add as friend" → "Pending")
 - Persistent CTA at the top to share invite link or show QR code
 
 **Settings:**
