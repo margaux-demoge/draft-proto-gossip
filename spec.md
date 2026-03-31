@@ -332,6 +332,8 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 - **Names:** Use first name only, exactly as entered at onboarding.
 - **Tone baseline:** Warm across all styles. Roast is never mean.
 - **Facts:** Never fabricate. Only write what the user actually shared.
+- **Privacy:** Never publish anything that could embarrass the user. If the user explicitly said they don't want something shared, respect it — do not include it in any card.
+- **Consent:** When in doubt, omit. The guardrail is a prompt engineering requirement, not a product feature.
 
 ---
 
