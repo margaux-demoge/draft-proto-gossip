@@ -2,12 +2,12 @@
 
 ## What is DRAFT?
 
-DRAFT is a social app for close friend groups. An AI journalist talks to each person in the group, asks them questions about their life, and publishes AI-written cards in a shared feed — so everyone always knows what's going on with their friends, without anyone having to post.
+DRAFT is a social app for close friend groups. An AI journalist talks to each person in the group, asks them questions about their life, and publishes AI-written posts in a shared feed — so everyone always knows what's going on with their friends, without anyone having to post.
 
 Two things happen in the app:
 
-1. **Consumption** — you scroll a feed of cards written about your friends (and yourself). Third-person, journalistic tone. Cards are short, punchy, and feel like headlines from a newspaper about your group.
-2. **Creation** — DRAFT asks you a question (twice a day, at 9:47 and 18:12). You reply in a chat-like interface. DRAFT decides whether to turn your answer into a card. You never know what she'll write or when — the surprise is part of the product.
+1. **Consumption** — you scroll a feed of posts written about your friends (and yourself). Third-person, journalistic tone. Posts are short, punchy, and feel like headlines from a newspaper about your group.
+2. **Creation** — DRAFT asks you a question (twice a day, at 9:47 and 18:12). You reply in a chat-like interface. DRAFT decides whether to turn your answer into a post. You never know what she'll write or when — the surprise is part of the product.
 
 The key insight: people stop sharing because creating content is high-friction and high-pressure. If an AI writes about you in third person, you can share things you'd never post yourself. It removes the social pressure entirely.
 
@@ -15,7 +15,7 @@ The key insight: people stop sharing because creating content is high-friction a
 
 ## The product in one sentence
 
-Every day, DRAFT writes a card about each person in your group — you just answer her questions.
+Every day, DRAFT writes a post about each person in your group — you just answer her questions.
 
 ---
 
@@ -30,30 +30,35 @@ Urban adults 18–30 with an active close friend group (5–15 people). They use
 Priority order for the 3-day sprint:
 
 ### 1. Design exploration + visual direction (Monday morning)
-Before diving into screens, we need a visual direction. The reference we've been working with is a **newspaper / magazine aesthetic** — big typography, strong headlines, clean layout. Cards should feel like articles that happen to be about your friends.
 
-Think: editorial, not social media. The feed is a daily edition. Each card is a story.
+Before diving into screens, we need a visual direction. The reference we've been working with is a **newspaper / magazine aesthetic** — big typography, strong headlines, clean layout. Posts should feel like articles that happen to be about your friends.
+
+Think: editorial, not social media. The feed is a daily edition. Each post is a story.
 
 A few things to explore:
-- How does the card format feel? (headline, body, subject attribution at the bottom — profile photo + first name, small, not dominant)
+
+- How does the post format feel? (headline, body, subject attribution at the bottom — profile photo + first name, small, not dominant)
 - Typography-driven layouts — bold headlines are the hero
-- Cards should be simple and stylized enough to be shareable outside the app (Instagram, WhatsApp, etc.)
+- Posts should be simple and stylized enough to be shareable outside the app (Instagram, WhatsApp, etc.)
 - The chat interface (DRAFT asking questions) lives **over** the feed, not as a separate tab. Think bottom sheet / expandable panel — secondary to the feed, but accessible at any time
 
 We have some Pinterest refs and early Figma explorations to share — we'll send those along with this brief.
 
 ### 2. Home feed + DRAFT question sheet (Monday → Wednesday)
+
 The core of the app. Two things coexist on this screen:
 
 **The feed:**
-- Chronological list of cards, newest first
+
+- Chronological list of posts, newest first
 - Relative timestamps ("1 hour ago", "yesterday")
 - Pull-to-refresh
 - Like button (count visible) + Share button (fixed label, opens iOS share sheet)
-- 3-dots menu per card (remove / report)
-- Floating bubble when new cards are published while you're in the app
+- 3-dots menu per post (remove / report)
+- Floating bubble when new posts are published while you're in the app
 
 **The DRAFT question sheet (lives on top of the feed):**
+
 - A bottom sheet that opens when DRAFT has a question for you
 - Shows DRAFT's question (no avatar — DRAFT is not a personified character)
 - Text input for the user to reply
@@ -65,27 +70,32 @@ The core of the app. Two things coexist on this screen:
 - Sheet is dismissible, but answering is the main CTA
 
 ### 3. Onboarding (Wednesday)
+
 Minimal — we want to get people into the app as fast as possible.
 
 Screens in order:
+
 1. **Splash** — logo + app name, auto-advances
 2. **Name** — first name only
 3. **Age**
 4. **Gender**
-5. **Profile photo** — camera roll upload only (no in-app camera). Important for card attribution.
+5. **Profile photo** — camera roll upload only (no in-app camera). Important for post attribution.
 6. **Push permission** — explain why before triggering the native iOS prompt
-7. **Home feed** — land here with welcome card already visible + DRAFT's first question open immediately as a bottom sheet
+7. **Home feed** — land here with welcome post already visible + DRAFT's first question open immediately as a bottom sheet
 
 No sign-up, no account creation, no friend discovery during onboarding. Friends are added later via QR code or invite link.
 
 ### 4. If time: Friends screen + Settings
+
 Lower priority — can be picked up the following week if needed.
 
 **Friends screen:**
+
 - Three sections: pending requests (accept / reject) + current friends list (remove) + friend suggestions (friends of friends, "Add as friend" → "Pending")
 - Persistent CTA at the top to share invite link or show QR code
 
 **Settings:**
+
 - Profile: Name (editable), Profile photo (editable)
 - Access: Notifications
 - Community: Help, Submit Feature Request, Give a Review
@@ -102,7 +112,7 @@ No need to design for these — they're explicitly out of scope:
 
 - Comments or in-app messaging (users go back to WhatsApp/Snap to follow up)
 - Sub-groups or scoping
-- Card detail screen
+- Post detail screen
 - Quick-reply chips on prompts
 - Data integrations (Spotify, Photos, etc.)
 - Weekly digest / newspaper format (the metaphor is the inspiration, not a literal format)
@@ -111,35 +121,37 @@ No need to design for these — they're explicitly out of scope:
 
 ---
 
-## Card format
+## Post format
 
-Cards are the heart of the product. A few things to keep in mind:
+Posts are the heart of the product. A few things to keep in mind:
 
 - Written in third person ("Margaux had a rough week but is already planning her weekend")
 - Subject is attributed at the bottom: small profile photo + first name. Not the headline — the content is the hero, not the person's identity
 - Text-only in MVP (no photos, music, location)
 - Should feel shareable — simple, typographically clean, strong enough to screenshot and send to a friend
-- Cards to design: standard card, welcome card ("[Name] just joined DRAFT!" with QR code + share CTA)
-- Shareable image export: when a card is shared via the iOS share sheet, the exported image must include visible DRAFT branding (logo + app name) so that people who see it on WhatsApp or Instagram can identify and download the app. The image must be self-contained and sleek — it should look good without any surrounding UI.
+- Posts to design: standard post, welcome post ("[Name] just joined DRAFT!" with QR code + share CTA)
+- Shareable image export: when a post is shared via the iOS share sheet, the exported image must include visible DRAFT branding (logo + app name) so that people who see it on WhatsApp or Instagram can identify and download the app. The image must be self-contained and sleek — it should look good without any surrounding UI.
 
 ---
 
 ## References
 
-- Newspaper / magazine editorial layouts — for card typography and feed structure
-- Pinterest board: https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=85-2183&p=f&t=x3kP1ZRoiKk4vCE8-0
-- Figma explorations: https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=0-1&p=f&t=x3kP1ZRoiKk4vCE8-0
+- Newspaper / magazine editorial layouts — for post typography and feed structure
+- Pinterest board: [https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=85-2183&p=f&t=x3kP1ZRoiKk4vCE8-0](https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=85-2183&p=f&t=x3kP1ZRoiKk4vCE8-0)
+- Figma explorations: [https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=0-1&p=f&t=x3kP1ZRoiKk4vCE8-0](https://www.figma.com/design/yvFt3EyMxbnoUtMVIoOwts/DRAFT---Design-brief?node-id=0-1&p=f&t=x3kP1ZRoiKk4vCE8-0)
 
 ---
 
 ## Timeline
 
-| Day | Focus |
-|-----|-------|
-| Monday | Visual direction exploration, logo directions, card format |
-| Tuesday | Home feed + DRAFT question sheet |
-| Wednesday | Onboarding, iteration on feed/card |
-| Following week | Friends screen, settings, iteration |
+
+| Day            | Focus                                                      |
+| -------------- | ---------------------------------------------------------- |
+| Monday         | Visual direction exploration, logo directions, post format |
+| Tuesday        | Home feed + DRAFT question sheet                           |
+| Wednesday      | Onboarding, iteration on feed/post                         |
+| Following week | Friends screen, settings, iteration                        |
+
 
 ---
 

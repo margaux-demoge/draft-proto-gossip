@@ -12,15 +12,33 @@ There are two reasons people have stopped sharing what's actually going on in th
 
 **Target users**
 
-Primary: Urban adults 18–30 with an active close friend group (5–15 people). They use WhatsApp constantly but haven't posted on Instagram in months.
+Primary: 16–25 year-olds with an active close friend group (5–15 people). They live on WhatsApp and Snapchat but haven't posted on Instagram in months. Post-graduation, post-breakup, post-move — the moments when you lose touch with what your friends are actually doing.
 
-Secondary: People who feel out of touch with friends post-move, post-graduation, post-breakup.
+Secondary: Anyone who feels out of the loop with their close friends and doesn't have the energy or motivation to post about their own life.
 
 Not for: couples, family groups, public creators, professional networks.
 
 ---
 
-## 2. Success metrics
+## 2. Product experience
+
+Instead of posting on social media, you answer questions from an AI (Draft) — and it turns your answers into short posts published in a shared feed with your friends.
+
+**Here's what happens:**
+
+You install the app, enter your name, age and gender, and DRAFT immediately asks you a first question. No account creation needed, everything is device-based.
+
+Twice a day (morning and evening), DRAFT sends you a push notification and asks you something about your life, like a curious friend checking in. You reply via text, voice or photo. DRAFT may follow up with more questions to dig deeper. Then, without asking your permission, it decides whether there's enough signal to write a post, and publishes it in your friends' feed (and yours too obviously).
+
+The feed is chronological, on a rolling 48-hour window. You see posts about your friends, you can like or share them. If a post is about you and you want it gone, you can remove it.
+
+Friends are added exclusively via invite link or QR code, no search, no contact sync. Clicking someone's link makes you friends immediately, no confirmation needed. You can always remove a friendship later.
+
+In short: you talk, DRAFT writes, your friends read.
+
+---
+
+## 3. Success metrics
 
 
 | #   | Hypothesis                                                                                                                | Metric | Target |
@@ -31,42 +49,49 @@ Not for: couples, family groups, public creators, professional networks.
 
 ---
 
-## 3. Scope
+## 4. Scope
 
 **In MVP**
 
 - No authentication: account created automatically on device at first launch
-- Minimal onboarding: name, age, gender, profile photo (camera roll upload), push permission
-- Welcome card on first session: "[Name] just joined DRAFT!" with QR code and share link
-- DRAFT's first question opens as a bottom sheet immediately on home feed arrival
-- AI-generated cards published throughout the day, based on conversations with DRAFT
+- Minimal onboarding: name, age, gender, push permission. No profile photo — first letter of name used as avatar.
+- Welcome post on first session: "[Name] just joined DRAFT!" with QR code and share link. Persists indefinitely (does not expire after 48h). Accessible from the friends tab at all times.
+- At the end of onboarding, user lands on the friends tab (if they came from a link) or the home feed (if they didn't)
+- AI-generated posts published throughout the day, based on conversations with DRAFT
 - Conversational input loop: DRAFT prompts users 2× daily (9:47 and 18:12)
-- Like button on each card with visible like count
-- Share button on each card: fixed label "Share", opens iOS native share sheet (image output). CTA is never AI-generated in MVP.
-- Card moderation via 3-dots menu: remove card (if tagged) or report
+- Post generation: 30 minutes after the user's last message in the exchange. No generation without user input.
+- Like button on each post with visible like count
+- Share button on each post: fixed label "Share", opens iOS native share sheet (image output). CTA is never AI-generated in MVP.
+- Post moderation via 3-dots menu: remove post (if tagged) or report
+- Block/report: Amplitude event log only, manual team review. No complex moderation UI.
 - Chronological feed with relative timestamps, pull-to-refresh
-- Push notifications for new cards and new prompts from DRAFT
+- Push notifications: 4 types (friend added, post about you, post in your feed, DRAFT check-in as chat preview)
+- Friend system: click on link = direct friendship, no confirmation needed. No pending requests. User can unfriend.
+- Friend suggestions: friends of your direct friends (cascading — if you add someone, you see their friends too)
 - iOS only, English, US App Store
 
 **Out of MVP**
 
+- Profile photo upload
+- Waiting list
+- Auto-generation without user input (generating posts from stored facts even if user hasn't responded)
 - User-initiated input (DRAFT always initiates)
 - Data integrations (Spotify, Apple Health, Photos, Calendar)
 - In-app messaging
-- Friend search, contact scan, and algorithmic friend suggestions (e.g. based on contacts or location). For MVP, groups are onboarded together via the ambassador programme. Basic mutual-friend suggestions (friends of friends) are included in MVP.
+- Friend search, contact scan
 - Sub-group scoping
 - Weekly digest or newspaper format
 - Public profiles or discovery
-- Card detail screen
+- Post detail screen
 - Quick-tap reply options on prompts
-- Duplicate card detection when two friends mention the same event
-- Card generation restricted to daytime hours (7am–10:30pm); MVP generates at any time
+- Duplicate post detection when two friends mention the same event
+- Post generation restricted to daytime hours (7am–10:30pm); MVP generates at any time
 - Question sheet "closed" state: MVP always shows the last exchange, overwritten by next question
 - Android, web, non-US markets
 
 ---
 
-## 4. Flows
+## 5. Flows
 
 ---
 
@@ -74,17 +99,16 @@ Not for: couples, family groups, public creators, professional networks.
 
 **Trigger**: First app launch with no stored session.
 
-**End state**: User is on the home feed with their welcome card visible and DRAFT's first question open in a bottom sheet.
+**End state**: If the user came from a friend's link: user is on the friends tab, sees their new friend and "people you may know" suggestions. If the user didn't come from a link: user is on the home feed with the welcome post visible and DRAFT's first question open in the bottom sheet.
 
 #### Steps
 
 1. **Splash**: Show the app logo and name. Single screen, no value prop copy needed for MVP. Auto-advances after a brief moment or on tap.
-2. **Name**: The user enters their first name so DRAFT can personalise cards and questions from day one.
-3. **Age**: The user enters their age. Used by DRAFT to calibrate question tone and relevance.
-4. **Gender**: The user selects their gender. Used by DRAFT to personalise questions and card writing.
-5. **Profile photo**: The user uploads a photo from their camera roll. Used to attribute cards in the feed and friend lists.
-6. **Push permission**: Explain why notifications matter before triggering the native iOS prompt, so the user grants permission with context.
-7. **Home feed**: The user lands on their feed. A welcome card is already present: "[Name] just joined DRAFT!" with a QR code and a "Share your link" CTA. DRAFT's first question opens immediately as a bottom sheet over the feed.
+2. **Name**: The user enters their first name so DRAFT can personalise posts and questions from day one.
+3. **Age**: The user enters their age. Used by DRAFT to calibrate question tone and relevance. Required for Apple age restrictions.
+4. **Gender**: The user selects their gender. Used by DRAFT to personalise questions and post writing (he/she/they).
+5. **Push permission**: Explain why notifications matter before triggering the native iOS prompt, so the user grants permission with context.
+6. **Friends tab or Home feed**: See end state above. If coming from a link, the friend is already added and the friends tab opens with suggestions. If not from a link, the home feed opens with the welcome post and DRAFT's first question in the bottom sheet.
 
 #### Business rules
 
@@ -94,27 +118,27 @@ Not for: couples, family groups, public creators, professional networks.
 - If the user deletes and reinstalls the app, their account is preserved (same strategy as Orai — device token stored server-side).
 - If the user switches devices, their account is lost. This is acceptable for MVP.
 
-**Welcome card**
+**Welcome post**
 
-- The welcome card "[Name] just joined DRAFT!" is generated immediately on account creation, before the user reaches the home feed. It contains a QR code linking to the user's personal invite link and a "Share your link" CTA. Its purpose is to seed the growth loop from the very first session.
-- The welcome card is visible only to the user themselves — friends do not see it. It disappears from the feed after 48h, like any other card.
+- The welcome post "[Name] just joined DRAFT!" is generated immediately on account creation. It contains a QR code linking to the user's personal invite link and a "Share your link" CTA. Its purpose is to seed the growth loop from the very first session.
+- The welcome post is visible only to the user themselves — friends do not see it. It does **not** expire — it persists indefinitely and remains accessible from the friends tab so the user can always share their link.
 
 **First question**
 
-- DRAFT's first question appears as a bottom sheet over the home feed immediately on first arrival. It does not wait for the scheduled 9:47 or 18:12 prompt window.
-- The first question is drawn from a dedicated onboarding question list (not the regular theme library). See `[CLARIFY]` in §8.
+- DRAFT's first question appears as a bottom sheet over the home feed immediately on first arrival (for users who didn't come from a link). It does not wait for the scheduled 9:47 or 18:12 prompt window.
+- The first question uses a theme from the regular theme library (themes are randomized by the backend — see §9 Prompt architecture).
 
 **Friend graph**
-Friends are not added during onboarding. They are added later via the share link or QR code. The onboarding funnel does not include a friend discovery step.
 
-**Growth**
-The primary acquisition mechanic for MVP is ambassador-driven: groups of friends are onboarded together via an external programme. The in-app share link and QR code support and reinforce this.
+- If the user came from a link: they are automatically added as friends with the person who shared the link (no confirmation needed). The friends tab opens showing this friend and "people you may know" suggestions (friends of that friend).
+- If the user didn't come from a link: they arrive on the home feed. Friends are added later via the share link or QR code.
 
 #### Error paths & edge cases
 
 - User quits mid-onboarding → resume from the last completed step on next launch
 - User skips push permission → they can still use the app but will not receive prompt notifications. Every 24h, a full-screen skippable screen (reusing Frank's implementation) explains why notifications matter, with a CTA that redirects to iOS Settings > DRAFT > Notifications.
 - User creates account and receives the onboarding first question → no scheduled prompt (9:47 / 18:12) is sent if the user already received a prompt in the last 4 hours
+- Deep link doesn't resolve (user came from a link but deferred deep link fails) → user lands on home feed, can re-click the link later to open the friends tab and add the friend
 
 ---
 
@@ -122,35 +146,34 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 **Trigger**: Scheduled prompt at 9:47 or 18:12.
 
-**End state**: User has completed the exchange. DRAFT decides independently whether to generate a card.
+**End state**: User has completed the exchange. DRAFT decides independently whether to generate a post.
 
 #### Steps
 
-1. **Push notification**: DRAFT sends a notification that feels like a message from a friend, not a survey prompt. It builds curiosity or references something from a previous exchange before surfacing a question. The question is never stated directly in the notification. Tapping the notification opens the app and immediately opens the chat bottom sheet in its active state. `[CLARIFY]` Exact push notification copy examples to be written before build — owner: Margaux.
+1. **Push notification**: DRAFT sends a notification displayed as a **chat message preview** — showing the actual question text, not a generic label like "DRAFT has a question." This makes it feel like a personal message. Tapping the notification opens the app and immediately opens the chat bottom sheet.
 2. **DRAFT question sheet**: A bottom sheet opens over the feed showing DRAFT's question. The user sees the question in full before deciding whether to answer.
 3. **User reply**: The user replies via text, voice, or image (reusing the Frank/Orai chat component).
-4. **Follow-up**: DRAFT continues asking follow-up questions to gather more context. The user can stop replying at any time. There is no artificial limit on the number of follow-ups. See `[CLARIFY]` in §8 for the stopping trigger.
-5. **Sheet closes**: The user stops responding and dismisses the sheet. No loading, no indication of what happens next. DRAFT processes the exchange in the background and decides independently whether to generate a card.
+4. **Follow-up**: DRAFT continues the conversation based on the follow-up trigger rules (see below). The user can stop replying at any time.
+5. **Sheet closes**: The user stops responding and dismisses the sheet. No loading, no indication of what happens next. DRAFT processes the exchange in the background and decides independently whether to generate a post.
 
 #### Business rules
 
-**Card generation**
+**Post generation**
 
-- Card generation is fully decoupled from the exchange. The user never knows if their response will generate a card, when, or what it will say. The surprise is intentional and core to the product.
-- The generation process starts 30 minutes after the user's first reply, not 30 minutes after DRAFT sent the question. If the user never replies, no generation is triggered from that exchange.
-- DRAFT should try to generate at least 1 card per user per day using existing context, even if the user has not responded to any prompt that day.
-- If a card is generated: a push notification is sent to the user's friends, and the card appears in their feed.
-- If the input contains no signal (no named person, place, event, or emotional state with context): no card is generated and no feedback is given to the user.
-- For MVP, cards are generated at any time of day. Future behaviour: cards are only published between 7am and 10:30pm. Responses received after 10:30pm trigger generation the next morning at 7am.
+- Post generation is fully decoupled from the exchange. The user never knows if their response will generate a post, when, or what it will say. The surprise is intentional and core to the product.
+- The generation process starts **30 minutes after the user's last message** in the exchange. If the user never replies, no generation is triggered from that exchange.
+- If the user doesn't respond to a prompt, no post is generated. There is no automatic generation without user input.
+- If a post is generated: a push notification is sent to the user's friends, and the post appears in their feed.
+- If the input contains no signal (no named person, place, event, or emotional state with context): no post is generated and no feedback is given to the user.
+- For MVP, posts are generated at any time of day. Future behaviour: posts are only published between 7am and 10:30pm. Responses received after 10:30pm trigger generation the next morning at 7am.
 
-**Card timestamp**
+**Post timestamp**
 
-- A card's timestamp is always the moment it is created, regardless of when the user shared the underlying information.
+- A post's timestamp is always the moment it is created, regardless of when the user shared the underlying information.
 
 **Question system**
 
-- For MVP, DRAFT selects a theme at random from the library. Each theme has an equal chance of being selected.
-- `[CLARIFY]` Question generation timing: generated synchronously at send time, or pre-generated a few hours in advance? To validate with engineering.
+- DRAFT selects a theme at random from the library. Themes (~15) are hardcoded in the backend and passed as variables to the check-in prompt. The LLM does not choose themes — the backend randomizes.
 
 **Prompts**
 
@@ -158,28 +181,30 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 - DRAFT references previous exchanges when relevant. For example, the next day's prompt may open with a callback to what was discussed ("Yesterday you mentioned the Netflix thing — how did it go?") before moving to a new question. This builds trust and makes the interaction feel like a real conversation rather than a survey.
 - Max 2 prompts per day per user.
 
-**Follow-up**
+**Follow-up trigger**
 
-- There is no maximum number of follow-ups. The exchange stays open until the user stops responding. See `[CLARIFY]` in §8 for the trigger that tells DRAFT to stop and generate.
+- **Exchanges 1–3**: DRAFT pushes in curiosity mode — direct questions with question marks. The goal is to extract maximum context. ("Ah nice, who was there?" / "Wait, what happened after that?")
+- **From exchange 4**: DRAFT switches to soft/curious mode — no direct questions, but still shows interest. ("Sounds like a great weekend. You'll have to tell me how it goes." — period, not question mark.)
+- If the user re-engages after the soft mode → DRAFT goes back to question mode.
+- The user who returns 2 hours later keeps the conversation history — it's only overwritten by the next check-in prompt.
 
 **Offline**
 
 - If the user submits while offline: the response is stored locally with a "pending" status visible to the user.
 
-**Bottom sheet states**
+**Bottom sheet**
 
-- The DRAFT question sheet has four distinct states:
-(a) Minimized / active — DRAFT has a question waiting. Small bar with a glow or badge effect. Label: "DRAFT has a question for you." No message preview shown.
-(b) Open — Full bottom sheet with the chat interface. Reuse the Frank/Orai chat component (text, voice, image input supported).
-(c) Minimized / processing — User replied and dismissed the sheet while DRAFT is generating. Small bar shows "DRAFT is writing…". Transitions back to (a) active once ready.
-(d) Minimized / idle — Nothing to do right now. Small bar in a subdued/disabled state, waiting for the next scheduled prompt.
+- The bottom sheet has two states:
+(a) **Badge** — DRAFT has a new message the user hasn't read. Small indicator (badge/dot) on the bottom sheet bar.
+(b) **No badge** — No new messages. The user can still open the bottom sheet at any time to continue a conversation or re-read the last exchange.
+- The user can **always** open the bottom sheet, regardless of state.
 
 #### Error paths & edge cases
 
-- User dismisses without answering → no card generated from that exchange, prompt not repeated today
+- User dismisses without answering → no post generated from that exchange, prompt not repeated today
 - User has already received 2 prompts today → no further prompts until the next day
 - Network failure on submit → response stored as "pending", auto-sent on reconnect with retry logic
-- User responds at 11:55pm → card generated at 12:25am, timestamped at creation time
+- User responds at 11:55pm → post generated at 12:25am, timestamped at creation time
 
 ---
 
@@ -187,85 +212,85 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 **Trigger**: User opens the app after completing onboarding.
 
-**End state**: User has consumed at least one card and optionally taken an action.
+**End state**: User has consumed at least one post and optionally taken an action.
 
 #### Steps
 
-1. **Home feed**: The user sees a chronological list of cards, newest first. Timestamps are displayed as relative labels ("1 hour ago", "yesterday"). No date dividers.
-2. **Pull-to-refresh**: The user pulls down to refresh the feed and load new cards published since last open.
-3. **Scrolling**: As the user scrolls, cards enter the viewport. A card is marked as viewed after 1 continuous second of at least 50% visibility.
-4. **Like**: The user taps the like button on a card. The like count is visible to all users.
-5. **Share**: The user taps the share button on a card to open the iOS native share sheet. The card is exported as an image.
-6. **3-dots menu**: The user taps the 3-dots button on any card to open a context menu. Options depend on whether the card is about themselves or someone else (see Card moderation flow).
-7. **New activity bubble**: When new cards are published while the user is in the app, a floating bubble appears at the bottom. Tapping it refreshes the feed and scrolls to the top.
+1. **Home feed**: The user sees a chronological list of posts, newest first. Timestamps are displayed as relative labels ("1 hour ago", "yesterday"). No date dividers.
+2. **Pull-to-refresh**: The user pulls down to refresh the feed and load new posts published since last open.
+3. **Scrolling**: As the user scrolls, posts enter the viewport. A post is marked as viewed after 1 continuous second of at least 50% visibility.
+4. **Like**: The user taps the like button on a post. The like count is visible to all users.
+5. **Share**: The user taps the share button on a post to open the iOS native share sheet. The post is exported as an image.
+6. **3-dots menu**: The user taps the 3-dots button on any post to open a context menu. Options depend on whether the post is about themselves or someone else (see Post moderation flow).
+7. **New activity bubble**: When new posts are published while the user is in the app, a floating bubble appears at the bottom. Tapping it refreshes the feed and scrolls to the top.
 
 #### Business rules
 
 **Social graph**
 
-- Friendship is mutual and symmetric. Both users must accept the connection before either can see the other's cards. If either user removes the friendship, both lose access to each other's content immediately.
+- Friendship is created instantly when someone clicks a friend's invite link — no confirmation required. Either user can remove the friendship at any time. Removal is symmetric: both lose access to each other's content immediately.
 
 **Visibility**
 
-- A card is visible to all confirmed friends of its subject.
-- For MVP, a card always has exactly one subject. Other first names may appear in the body text, but only the subject's profile photo and name are displayed on the card.
+- A post is visible to all friends of its subject.
+- For MVP, a post always has exactly one subject. Other first names may appear in the body text, but only the subject's avatar (first letter) and name are displayed on the post.
 
-**Own cards**
+**Own posts**
 
-- The user sees their own cards in the feed exactly as others do. They will recognise their own photo and name. No special layout or pinning.
-- If the user has zero friends, their own cards are visible only to themselves. Empty state prompts them to invite people.
+- The user sees their own posts in the feed exactly as others do. They will recognise their own name and avatar. No special layout or pinning.
+- If the user has zero friends, their own posts are visible only to themselves. Empty state prompts them to invite people.
 
 **Content window**
 
-- The feed shows the last 48 hours of cards. Not a calendar day. Rolling 48-hour window.
-- Card data is never deleted from the server. Cards are only hidden from the feed after 48h.
+- The feed shows the last 48 hours of posts. Not a calendar day. Rolling 48-hour window.
+- Post data is never deleted from the server. Posts are only hidden from the feed after 48h.
 
 **Likes**
 
 - Like count is visible to all users. Who liked is not shown in MVP.
-- Tapping like on a card that the user has already liked removes the like (toggle behaviour).
-- When a friend likes a card the user is mentioned in, a push notification is sent: "[Friend name] liked a post you are mentioned in."
+- Tapping like on a post that the user has already liked removes the like (toggle behaviour).
+- When a friend likes a post the user is mentioned in, a push notification is sent: "[Friend name] liked a post you are mentioned in."
 
 #### Error paths & edge cases
 
 - Feed empty, no friends → empty state with invite nudge
-- Feed empty, follows present but no cards yet → "DRAFT is still gathering intel. Check back soon."
+- Feed empty, friends present but no posts yet → "DRAFT is still gathering intel. Check back soon."
 - Offline → cached feed shown with an "Offline" banner, like and share buttons disabled
 
 ---
 
-### Flow: Card moderation
+### Flow: Post moderation
 
-**Trigger**: User taps the 3-dots button on a card.
+**Trigger**: User taps the 3-dots button on a post.
 
-**End state for own card**: The card is removed from all feeds where it was visible (the user's own feed and all their friends' feeds).
+**End state for own post**: The post is removed from all feeds where it was visible (the user's own feed and all their friends' feeds).
 
-**End state for another person's card**: The report is submitted.
+**End state for another person's post**: The report is submitted.
 
-#### Steps (own card — user is the subject)
+#### Steps (own post — user is the subject)
 
-1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "Remove this card" and Cancel.
-2. **"Remove this card"**: A confirmation dialog asks the user to confirm removal. On confirm, the card is immediately deleted from all friends' feeds.
+1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "Remove this post" and Cancel.
+2. **"Remove this post"**: A confirmation dialog asks the user to confirm removal. On confirm, the post is immediately deleted from all friends' feeds.
 
-#### Steps (another person's card)
+#### Steps (another person's post)
 
 1. **3-dots menu**: Tapping the 3-dots button opens a context menu with: "Report" and Cancel.
-2. **Report**: The report is submitted immediately — no category selection required. A `Content Reported` analytics event is fired (card_id + associated data) for manual team review. A confirmation modal is shown: "Thanks, our team will review this quickly."
+2. **Report**: The report is submitted immediately — no category selection required. A `Content Reported` analytics event is fired (post_id + associated data) for manual team review. A confirmation modal is shown: "Thanks, our team will review this quickly."
 
 #### Business rules
 
 **Removal**
 
-- Deletion is silent. Friends see the card disappear with no explanation or notification.
-- The card_removed rate is tracked in analytics as a proxy for content quality.
+- Deletion is silent. Friends see the post disappear with no explanation or notification.
+- The post_removed rate is tracked in analytics as a proxy for content quality.
 
 **Permissions**
 
-- Users can remove only cards where they are the subject. They cannot modify cards about other people.
+- Users can remove only posts where they are the subject. They cannot modify posts about other people.
 
 **Report**
 
-- All users can report any card via the 3-dots menu. Required by Apple for UGC apps.
+- All users can report any post via the 3-dots menu. Required by Apple for UGC apps. MVP implementation: Amplitude event log only, manual team review. No complex moderation UI.
 
 #### Error paths & edge cases
 
@@ -275,41 +300,37 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 ### Flow: Friend management
 
-**Trigger**: User taps the friends icon or navigates to the friend management screen.
+**Trigger**: User taps the friends icon or navigates to the friends tab.
 
-**End state**: User has reviewed pending friend requests, their current friend list, and friend suggestions.
+**End state**: User has reviewed their current friend list and friend suggestions.
 
 #### Steps
 
-1. **Friend management screen**: A single screen with three sections: (1) pending friend requests, (2) current friend list, (3) friend suggestions.
-2. **At the top of the screen**: A persistent CTA to share the user's invite link or display their QR code, so they can grow their friend list at any time.
-3. **Accept request**: The requesting user is added as a mutual friend immediately. Both users now see each other's cards.
-4. **Reject request**: The request is removed silently. The requesting user is not notified.
-5. **Remove friend**: A confirmation prompt before removal. Both users immediately lose access to each other's cards.
-6. **Friend suggestions**: Shown below the friend list once the user has ≥ 1 confirmed friend. Displays friends of friends (deduped). Tapping "Add as friend" sends a request and the button switches to a "Pending" state.
+1. **Friends tab**: A single screen with two sections: (1) current friend list, (2) friend suggestions ("people you may know").
+2. **At the top of the screen**: A persistent CTA to share the user's invite link or display their QR code, so they can grow their friend list at any time. The welcome post's share CTA also links here.
+3. **Add friend via link**: When someone clicks the user's invite link, they become friends immediately — no confirmation needed. The user receives a push notification: "[Name] just joined Draft" (or "[Name] is now your friend" if the person already had an account).
+4. **Remove friend**: A confirmation prompt before removal. Both users immediately lose access to each other's posts. Removal also removes the person from each other's friend suggestions cascade.
+5. **Friend suggestions**: Shown below the friend list once the user has ≥ 1 friend. Displays friends of the user's direct friends. Tapping "Add" makes them friends immediately (no request, no pending state). Suggestions cascade: adding someone reveals their friends as new suggestions.
 
 #### Business rules
 
-**Friend requests**
+**Friendship model**
 
+- No friend requests, no pending states. Clicking a link = instant friendship. Adding a suggestion = instant friendship.
 - There is no in-app search for users. Friends are added exclusively via invite link, QR code, or friend suggestions.
-
-**Friend suggestions**
-
-- The friend suggestions section appears once the user has at least one confirmed friend. It shows friends of friends only — no other discovery logic for MVP. Results are deduped. Ordering is by simplest available signal (e.g. account creation date). Tapping "Add as friend" sends a friend request and the button enters a "Pending" state.
+- **Risk accepted**: anyone with a link can become friends and see content. Suggestions cascade, creating potential chain propagation. Decision: test in MVP, monitor via analytics, kill the cascade if it causes problems.
 
 **Share CTA**
 
-- The top of the friend management screen always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome card and keeps the growth loop accessible at all times.
+- The top of the friends tab always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the welcome post and keeps the growth loop accessible at all times.
 
 **Removal**
 
-- Friendship removal is symmetric and immediate. Neither user sees the other's cards after removal.
+- Friendship removal is symmetric and immediate. Neither user sees the other's posts after removal.
 
 #### Error paths & edge cases
 
-- User rejects a request → request disappears, no notification sent to requester
-- User removes a friend → both lose access to each other's cards immediately; cards already in the feed disappear on next refresh
+- User removes a friend → both lose access to each other's posts immediately; posts already in the feed disappear on next refresh
 
 ---
 
@@ -329,13 +350,13 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 **Settings content**
 
-- Profile: Name (editable), Profile photo (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
-- There is no separate profile tab in MVP. Name and profile photo are editable directly from Settings.
+- Profile: Name (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
+- There is no separate profile tab in MVP. Name is editable directly from Settings.
 - Reuse the generic Amon settings component already used in Orai and Frank.
 
 **Delete account**
 
-- Account deletion is permanent and irreversible. All cards authored by the user are removed from all friends' feeds immediately. The user's friends are not notified.
+- Account deletion is permanent and irreversible. All posts authored by the user are removed from all friends' feeds immediately. The user's friends are not notified.
 
 #### Error paths & edge cases
 
@@ -344,9 +365,26 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 
 ---
 
-## 5. Card styles
+## 6. Push notifications
 
-> DRAFT writes every card in one of four styles. The style shapes the tone and framing — not the facts. Every card is warm, personal, and always written in the third person about the subject.
+DRAFT uses 4 types of push notifications:
+
+
+| Type              | Content                                                                                           | Tap action                               |
+| ----------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Friend added      | "[Name] just joined Draft" or "[Name] is now your friend"                                         | Opens friends tab                        |
+| Post about you    | "New post about you in your feed"                                                                 | Opens home feed, scrolls to post         |
+| Post in your feed | "New post from [Friend name]"                                                                     | Opens home feed                          |
+| DRAFT check-in    | Chat message preview showing the actual question text (e.g. "Hey, how's your week going so far?") | Opens bottom sheet with the conversation |
+
+
+The check-in notification is designed to feel like a personal message, not an app alert. It displays the question text as a preview, like a chat notification.
+
+---
+
+## 7. Post styles
+
+> DRAFT writes every post in one of four styles. The style shapes the tone and framing — not the facts. Every post is warm, personal, and always written in the third person about the subject.
 
 ### Writing rules
 
@@ -356,7 +394,7 @@ The primary acquisition mechanic for MVP is ambassador-driven: groups of friends
 - **Names:** Use first name only, exactly as entered at onboarding.
 - **Tone baseline:** Warm across all styles. Roast is never mean.
 - **Facts:** Never fabricate. Only write what the user actually shared.
-- **Privacy:** Never publish anything that could embarrass the user. If the user explicitly said they don't want something shared, respect it — do not include it in any card.
+- **Privacy:** Never publish anything that could embarrass the user. If the user explicitly said they don't want something shared, respect it — do not include it in any post.
 - **Consent:** When in doubt, omit. The guardrail is a prompt engineering requirement, not a product feature.
 
 ---
@@ -395,7 +433,7 @@ Headline drops just enough to make you curious. Body adds one detail but leaves 
 
 - Headline hints without explaining.
 - Body adds one detail but withholds the conclusion.
-- Leave the gap intentional — the card should make friends reach out.
+- Leave the gap intentional — the post should make friends reach out.
 
 **Headline:** His "chill" weekend sounds… interesting
 **Body:** Just a quick trip to his parents, nothing special he said. But it felt like he skipped over something.
@@ -417,13 +455,13 @@ Headline sounds like something whispered across a table. Body leans in with one 
 
 ### Style selection
 
-DRAFT picks a style at random — each of the four styles has an equal 25% chance of being selected each time a card is generated. This ensures variety in the feed and provides an even distribution to measure engagement per style from the first cohort.
+DRAFT picks a style at random — the style is randomized by the backend and passed as a variable to the post generation prompt. The LLM does not choose styles. Each of the four styles has an equal 25% chance of being selected. This ensures variety in the feed and provides an even distribution to measure engagement per style from the first cohort.
 
 ---
 
-## 6. Data / Dashboard
+## 8. Data / Dashboard
 
-> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §7.
+> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §10.
 
 ---
 
@@ -432,7 +470,7 @@ DRAFT picks a style at random — each of the four styles has an equal 25% chanc
 
 | Chart                  | Hypothesis | Calculation                                                 | Events                                                            |
 | ---------------------- | ---------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
-| Daily Engagement Rate  | H2         | `% of DAU who liked or shared ≥ 1 card` (rolling 7-day)     | Card Liked, Card Shared                                           |
+| Daily Engagement Rate  | H2         | `% of DAU who liked or shared ≥ 1 post` (rolling 7-day)     | Post Liked, Post Shared                                           |
 | Prompt Completion Rate | H1         | `count(Prompt Completed) / count(Prompt Sent)` per day      | Prompt Completed, Push Sent                                       |
 | D7 Retention           | —          | `users with ≥1 session on day 7 / users installed on day 0` | [Amplitude] Application Installed, [Amplitude] Application Opened |
 
@@ -442,30 +480,71 @@ DRAFT picks a style at random — each of the four styles has an equal 25% chanc
 ### Supporting funnel charts
 
 
-| Chart                      | Purpose                                      | Calculation                                                                                                             | Events                                                                                        |
-| -------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Onboarding Funnel          | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Profile Photo → Push Permission → Account Created → First card received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
-| Friends Added (First 24h)  | Measure activation — is the graph seeded?    | `avg(Friend Request Accepted) per user in first 24h after Account Created`                                              | Friend Request Accepted, Account Created                                                      |
-| Average Cards Available    | Is there enough content in the feed?         | `count(distinct card_id seen) / unique active users` per day                                                            | Card Viewed                                                                                   |
-| Question → Card Conversion | How much signal turns into a published card? | `count(Card Generated) / count(Prompt Completed)`                                                                       | Prompt Completed, Card Generated (backend — to add)                                           |
-| Push Opt-in Rate           | Measure notification permission rate         | `Push Permission Completed (successful=true) / Push Permission Viewed`                                                  | Push Permission Viewed, Push Permission Completed                                             |
-| New Users (Last 7 Days)    | Track acquisition pace                       | `count(Account Created)` rolling 7-day                                                                                  | Account Created                                                                               |
-| Prompt Follow-up Rate      | Measure depth of exchange                    | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`                                            | Prompt Completed                                                                              |
-| Card Interaction Breakdown | Understand split of like vs share            | `count(Card Liked)` vs `count(Card Shared)` split by type                                                               | Card Liked, Card Shared                                                                       |
-| Invite Link Share Rate     | Measure growth loop activation               | `count(Invite Link Shared) / DAU`                                                                                       | Invite Link Shared                                                                            |
+| Chart                      | Purpose                                      | Calculation                                                                                             | Events                                                                                        |
+| -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Onboarding Funnel          | Identify drop-off steps                      | Step conversion: Splash → Name → Age → Gender → Push Permission → Account Created → First post received | Onboarding Step Viewed, Onboarding Step Completed, Push Permission Completed, Account Created |
+| Friends Added (First 24h)  | Measure activation — is the graph seeded?    | `avg(Friend Added) per user in first 24h after Account Created`                                         | Friend Added, Account Created                                                                 |
+| Average Posts Available    | Is there enough content in the feed?         | `count(distinct post_id seen) / unique active users` per day                                            | Post Viewed                                                                                   |
+| Question → Post Conversion | How much signal turns into a published post? | `count(Post Generated) / count(Prompt Completed)`                                                       | Prompt Completed, Post Generated (backend — to add)                                           |
+| Push Opt-in Rate           | Measure notification permission rate         | `Push Permission Completed (successful=true) / Push Permission Viewed`                                  | Push Permission Viewed, Push Permission Completed                                             |
+| New Users (Last 7 Days)    | Track acquisition pace                       | `count(Account Created)` rolling 7-day                                                                  | Account Created                                                                               |
+| Prompt Follow-up Rate      | Measure depth of exchange                    | `Prompt Completed (is_followup=true) / Prompt Completed (is_followup=false)`                            | Prompt Completed                                                                              |
+| Post Interaction Breakdown | Understand split of like vs share            | `count(Post Liked)` vs `count(Post Shared)` split by type                                               | Post Liked, Post Shared                                                                       |
+| Invite Link Share Rate     | Measure growth loop activation               | `count(Invite Link Shared) / DAU`                                                                       | Invite Link Shared                                                                            |
 
 
-> `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
+> `[CLARIFY]` A "Post Generated" backend event is needed to measure post generation rate (posts generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
 
 ### Feed density target
 
-Minimum viable feed density = **4 cards per day** for a 6-person group. Quality matters more than quantity — if cards are genuinely interesting, 4 is enough. If cards are mediocre, no amount compensates. The "Average Cards Available" chart above should be monitored against this threshold.
+Minimum viable feed density = **4 posts per day** for a 6-person group. Quality matters more than quantity — if posts are genuinely interesting, 4 is enough. If posts are mediocre, no amount compensates. The "Average Posts Available" chart above should be monitored against this threshold.
 
 ---
 
-## 7. Analytics event definitions
+## 9. Prompt architecture
 
-> Naming convention: Title Case, Object followed by past-tense verb (e.g. "Card Viewed", "Prompt Dismissed"). Aligns with Amon standard.
+DRAFT uses three distinct prompts, each with a specific role. Themes and styles are **hardcoded in the backend** and passed as variables to the prompts, the LLM does not choose them.
+
+### Check-in prompt
+
+**Purpose**: Send the push notification and opening question.
+**Variables**: theme (randomized by backend from ~15 themes) + full conversation history + history of posts already written about the user.
+**Behaviour**: Sends a question oriented toward the selected theme, referencing past exchanges when relevant. The question appears as a chat message preview in the push notification.
+
+### Main prompt
+
+**Purpose**: Handle the follow-up conversation after the user responds.
+**Variables**: current conversation history.
+**Behaviour**: Curious but not a companion. Asks direct follow-up questions for the first 3 exchanges (curiosity mode). From exchange 4, switches to soft/curious mode without direct questions. Stops naturally — doesn't try to keep the conversation going indefinitely.
+
+### Post generation prompt
+
+**Purpose**: Generate the post from the conversation.
+**Variables**: conversation history from the current exchange + style (randomized by backend from 4 styles).
+**Behaviour**: Triggered 30 minutes after the user's last message. Takes the conversation and writes a post in the assigned style. Output structure: headline + body, following the writing rules defined in §7.
+
+### Themes
+
+~15 themes to be defined. Examples discussed: future plans, weekend, music, travel, relationships. Themes are passed as variables to the check-in prompt — one theme per question.
+
+**Owner**: Margaux. To do.
+
+### Styles
+
+4 styles defined in §7 (Hype, Roast, Teaser, Gossip). Elaborate definitions to be written.
+
+**Owner**: Aymeric. To do.
+
+### Prompt writing
+
+- Check-in + main prompts — **owner: Margaux**
+- Post generation prompt + style integration — **owner: Aymeric**
+
+---
+
+## 10. Analytics event definitions
+
+> Naming convention: Title Case, Object followed by past-tense verb (e.g. "Post Viewed", "Prompt Dismissed"). Aligns with Amon standard.
 > All iOS events include `current_view` (required) and `previous_view` (optional) as standard properties on every event.
 
 ### Common events
@@ -473,20 +552,20 @@ Minimum viable feed density = **4 cards per day** for a 6-person group. Quality 
 Events shared with Frank and Orai. Reuse the existing Amplitude schema as-is — do not duplicate or rename.
 
 
-| Event                                | Category     | Source  | Notes                                                                                                         |
-| ------------------------------------ | ------------ | ------- | ------------------------------------------------------------------------------------------------------------- |
-| [Amplitude] Application Installed    | —            | ios     | Auto-tracked by Amplitude SDK                                                                                 |
-| [Amplitude] Application Opened       | —            | ios     | Auto-tracked by Amplitude SDK                                                                                 |
-| [Amplitude] Application Backgrounded | —            | ios     | Auto-tracked by Amplitude SDK                                                                                 |
-| [Amplitude] Application Updated      | —            | ios     | Auto-tracked by Amplitude SDK                                                                                 |
-| Account Created                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                                  |
-| Account Deleted                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                                  |
-| Onboarding Step Viewed               | Amon Default | ios     | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, profile_photo, push_permission` |
-| Onboarding Step Completed            | Amon Default | ios     | Same as above for `step_name`                                                                                 |
-| Push Permission Viewed               | Amon Default | ios     | Identical to Frank                                                                                            |
-| Push Permission Completed            | Amon Default | ios     | Identical to Frank                                                                                            |
-| Push Clicked                         | Amon Default | ios     | `type` enum must be updated: `card, prompt` (replaces Frank's `message, checkin, broadcast, insight`)         |
-| Setting Clicked                      | Amon Default | ios     | `setting_name` values to define for DRAFT settings screen                                                     |
+| Event                                | Category     | Source  | Notes                                                                                                               |
+| ------------------------------------ | ------------ | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| [Amplitude] Application Installed    | —            | ios     | Auto-tracked by Amplitude SDK                                                                                       |
+| [Amplitude] Application Opened       | —            | ios     | Auto-tracked by Amplitude SDK                                                                                       |
+| [Amplitude] Application Backgrounded | —            | ios     | Auto-tracked by Amplitude SDK                                                                                       |
+| [Amplitude] Application Updated      | —            | ios     | Auto-tracked by Amplitude SDK                                                                                       |
+| Account Created                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                                        |
+| Account Deleted                      | Amon Default | backend | Same schema as Frank. `account_id` required.                                                                        |
+| Onboarding Step Viewed               | Amon Default | ios     | `step_name` enum must be updated for DRAFT steps: `splash, name, age, gender, push_permission`                      |
+| Onboarding Step Completed            | Amon Default | ios     | Same as above for `step_name`                                                                                       |
+| Push Permission Viewed               | Amon Default | ios     | Identical to Frank                                                                                                  |
+| Push Permission Completed            | Amon Default | ios     | Identical to Frank                                                                                                  |
+| Push Clicked                         | Amon Default | ios     | `type` enum must be updated: `post, prompt, friend_added` (replaces Frank's `message, checkin, broadcast, insight`) |
+| Setting Clicked                      | Amon Default | ios     | `setting_name` values to define for DRAFT settings screen                                                           |
 
 
 ---
@@ -501,16 +580,33 @@ TBD when flows are ready.
 
 ---
 
-## 8. Open questions
+## 11. Monetization
+
+> Not implemented in MVP. Trigger: begin monetization work when D7 retention ≥ 35%.
+
+**Hard paywall** → No. Destroys the friend density required for a social app to work. Creates churn that leaves remaining users with too few friends on the platform.
+
+**Advertising** → Possible as a secondary lever, but not central. Text-based content in a free-scroll feed generates low ad revenue compared to video formats. Can be explored for optimisation, not as the primary model.
+
+**Main model: IAP consumables**
+
+- Unlock specific posts (you see the headline but pay to read the body)
+- Secret posts with name hidden — pay to reveal who it's about
+- Weekly editions (curated digest of the best posts)
+- Longer post versions (extended body text)
+- Media unlock (photos mentioned in the conversation)
+
+---
+
+## 12. Open questions
 
 **Must be resolved before build**
 
-- `[CLARIFY]` Theme library: the full list of 10–30 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. — owner: Margaux
-- `[CLARIFY]` Push notification copy: first notification should feel like a personal message from DRAFT (not a direct question), referencing past context. Exact copy and format to be defined. — owner: Margaux
-- `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing cards is already defined in §5.) Must be defined before front-end build. — owner: Margaux
-- `[CLARIFY]` Onboarding question list: a dedicated set of questions for the first onboarding exchange must be written. Each question should be specific enough that a single reply generates a card. Must include party-context variants (e.g. "How are you planning to end the night?"). — owner: Margaux
-- `[CLARIFY]` Follow-up stopping trigger: define the signal or rule that tells DRAFT to stop asking follow-ups and begin generating the card. — owner: Aymeric + engineering
-- `[CLARIFY]` Prompt specification: create a dedicated section in the spec to list and describe all prompt types (daily prompts, onboarding question, follow-ups), their exact behaviour, and the rules governing when each fires. — owner: Margaux
+- `[CLARIFY]` Theme library: the full list of ~15 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. — owner: Margaux
+- `[CLARIFY]` Push notification copy: check-in notification should display the question as a chat message preview. Exact copy and format to be defined. — owner: Margaux
+- `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing posts is already defined in §7.) Must be defined before front-end build. — owner: Margaux
+- `[CLARIFY]` Style definitions: elaborate the 4 post styles beyond the current examples. Must be detailed enough for prompt engineering. — owner: Aymeric
+- `[CLARIFY]` Prompt writing: write the 3 prompts (check-in, main/chat, post generation). Check-in + main — owner: Margaux. Post generation + styles — owner: Aymeric.
 
 **Engineering validation required**
 
@@ -519,13 +615,14 @@ TBD when flows are ready.
 
 **Risks**
 
-- `[RISK]` Card quality is the core bet. If DRAFT's output feels generic or inaccurate, the input loop breaks. Mitigation: run manual prompt tests with real users before automating card generation.
+- `[RISK]` Post quality is the core bet. If DRAFT's output feels generic or inaccurate, the input loop breaks. Mitigation: run manual prompt tests with real users before automating post generation.
 - `[RISK]` Cold start: a user with zero friends sees very little. For the test phase, cohorts must include 5–6 people who know each other and onboard together. This is a hard requirement for the first test, not a nice-to-have.
+- `[RISK]` Friend chain propagation: because friendship is instant (no confirmation) and suggestions cascade, a single shared link can lead to rapid, uncontrolled friend graph expansion. Anyone in the chain can see content from people they don't know. Mitigation: monitor via analytics, kill the cascade feature if it causes problems.
 
 **Assumptions**
 
-- `[ASSUMPTION]` Text-only conversation with no integrations generates cards worth reading. Validation: test with real users before the full build.
-- `[ASSUMPTION]` Native card sharing via iOS share sheet (image format) is sufficient for MVP virality. Validation: track Card Shared rate and qualitative feedback from the first cohort.
+- `[ASSUMPTION]` Text-only conversation with no integrations generates posts worth reading. Validation: test with real users before the full build.
+- `[ASSUMPTION]` Native post sharing via iOS share sheet (image format) is sufficient for MVP virality. Validation: track Post Shared rate and qualitative feedback from the first cohort.
 
 ---
 
