@@ -433,6 +433,10 @@ DRAFT picks a style at random — each of the four styles has an equal 25% chanc
 
 > `[CLARIFY]` A "Card Generated" backend event is needed to measure card generation rate (cards generated / Prompt Completed). Must be added to the analytics plan before build. — owner: engineering
 
+### Feed density target
+
+Minimum viable feed density = **4 cards per day** for a 6-person group. Quality matters more than quantity — if cards are genuinely interesting, 4 is enough. If cards are mediocre, no amount compensates. The "Average Cards Available" chart above should be monitored against this threshold.
+
 ---
 
 ## 7. Analytics event definitions
