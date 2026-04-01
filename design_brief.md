@@ -72,7 +72,7 @@ Screens in order:
 2. **Name** — first name only
 3. **Age**
 4. **Gender**
-5. **Profile photo** — we need to ask for this (important for card attribution)
+5. **Profile photo** — camera roll upload only (no in-app camera). Important for card attribution.
 6. **Push permission** — explain why before triggering the native iOS prompt
 7. **Home feed** — land here with welcome card already visible + DRAFT's first question open immediately as a bottom sheet
 
