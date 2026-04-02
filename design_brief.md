@@ -7,7 +7,7 @@ DRAFT is a social app for close friend groups. An AI journalist talks to each pe
 Two things happen in the app:
 
 1. **Consumption** — you scroll a feed of posts written about your friends (and yourself). Third-person, journalistic tone. Posts are short, punchy, and feel like headlines from a newspaper about your group.
-2. **Creation** — DRAFT asks you a question (twice a day, at 9:47 and 18:12). You reply in a chat-like interface. DRAFT decides whether to turn your answer into a post. You never know what she'll write or when — the surprise is part of the product.
+2. **Creation** — DRAFT asks you a question (twice a day, at 9:47 and 18:12). You reply in a chat-like interface. DRAFT decides whether to turn your answer into a post. You never know what it'll write or when — the surprise is part of the product.
 
 The key insight: people stop sharing because creating content is high-friction and high-pressure. If an AI writes about you in third person, you can share things you'd never post yourself. It removes the social pressure entirely.
 
@@ -15,7 +15,7 @@ The key insight: people stop sharing because creating content is high-friction a
 
 ## The product in one sentence
 
-Every day, DRAFT writes a post about each person in your group — you just answer her questions.
+Every day, DRAFT messages each person in your group and turns the conversation into posts, so you always know what's going on.
 
 ---
 
@@ -81,7 +81,7 @@ Screens in order:
 4. **Gender**
 5. **Profile photo** — camera roll upload only (no in-app camera). Important for post attribution.
 6. **Push permission** — explain why before triggering the native iOS prompt
-7. **Home feed** — land here with welcome post already visible + DRAFT's first question open immediately as a bottom sheet
+7. **Home feed** — land here with the invite card visible + DRAFT's first question open immediately as a bottom sheet
 
 No sign-up, no account creation, no friend discovery during onboarding. Friends are added later via QR code or invite link.
 
@@ -129,7 +129,7 @@ Posts are the heart of the product. A few things to keep in mind:
 - Subject is attributed at the bottom: small profile photo + first name. Not the headline — the content is the hero, not the person's identity
 - Text-only in MVP (no photos, music, location)
 - Should feel shareable — simple, typographically clean, strong enough to screenshot and send to a friend
-- Posts to design: standard post, welcome post ("[Name] just joined DRAFT!" with QR code + share CTA)
+- Posts to design: standard post. Separate UI element to design: invite card ("DRAFT works better with more friends" + QR code + Copy link CTA)
 - Shareable image export: when a post is shared via the iOS share sheet, the exported image must include visible DRAFT branding (logo + app name) so that people who see it on WhatsApp or Instagram can identify and download the app. The image must be self-contained and sleek — it should look good without any surrounding UI.
 
 ---
