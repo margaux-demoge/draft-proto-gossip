@@ -91,7 +91,10 @@ Lower priority — can be picked up the following week if needed.
 
 **Friends screen:**
 
-- Three sections: pending requests (accept / reject) + current friends list (remove) + friend suggestions (friends of friends, "Add as friend" → "Pending")
+- Two sections: current friends list (remove) + friend suggestions "People you may know" (friends of friends)
+- No friend requests, no pending states — adding a suggestion is instant, no confirmation needed
+- Friends list ordered most recently added first
+- "Add" button on suggestions toggles to "Added ✓" in place (person stays in suggestions until next screen open, then appears in friends list)
 - Persistent CTA at the top to share invite link or show QR code
 
 **Settings:**

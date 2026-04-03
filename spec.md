@@ -274,6 +274,18 @@ In short: you talk, DRAFT writes, your friends read.
 - There is no in-app search for users. Friends are added exclusively via invite link, QR code, or friend suggestions.
 - **Risk accepted**: anyone with a link can become friends and see content. Suggestions cascade, creating potential chain propagation. Decision: test in MVP, monitor via analytics, kill the cascade if it causes problems.
 
+**Friends list order**
+
+- Friends are displayed in reverse chronological order of when they were added — most recently added first.
+
+**"Add" button behaviour on suggestions**
+
+- Tapping "Add" on a suggestion creates the friendship instantly at the data level.
+- The button toggles to "Added ✓" (greyed out) in place — the person does not move from the suggestions section immediately.
+- The friends count at the top updates immediately (+1).
+- New suggestions from that person's network appear at the bottom of the "People you may know" section (cascade).
+- On the next time the user opens the Friends screen, the added person appears in the friends list and is no longer shown in suggestions.
+
 **Share CTA**
 
 - The top of the friends tab always shows a CTA to share the user's personal invite link or display their QR code. This mirrors the invite card and keeps the growth loop accessible at all times.
