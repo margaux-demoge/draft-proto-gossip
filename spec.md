@@ -49,7 +49,99 @@ In short: you talk, DRAFT writes, your friends read.
 
 ---
 
-## 4. Flows
+## 4. First cohort strategy
+
+> Owned by Jodie. This section defines how the first real users are acquired, what "activated" means, and the budget envelope for the test phase. It also justifies product decisions like the QR code and the instant friendship model.
+
+---
+
+### North star
+
+Get real friend groups into Draft. A user only counts if they have downloaded the app, shared their personal link, and added at least 1 friend inside the app.
+
+**Validation target**: 10 activated users meeting the full condition, across organizers and ambassadors combined.
+
+---
+
+### Payout structure
+
+| Condition | Payout |
+|---|---|
+| Download + share link + 1 friend added in app | $5 |
+| +$1 if that friend has themselves added at least 1 friend (via suggestions) | $1 |
+| Cap per organizer or ambassador | $150 |
+
+*Example: organizer downloads, shares their link, adds 1 friend, and that friend adds 1 more friend = $5 + $1 = $6.*
+
+---
+
+### Lever 1 — Party organizers
+
+Organizers host a real social event and get their guests to install Draft and add each other on the spot. Recruited via Instagram lead gen campaigns.
+
+**Funnel (conservative)**
+
+| Step | Conversion | Output |
+|---|---|---|
+| Instagram leads generated | — | ~100–250 leads at $200–500 spend |
+| Lead → confirmed organizer | ~10–15% | 15–20 organizers |
+| Organizer → meets full payout condition | ~30–40% | 5–8 organizers paid |
+| Cascade bonus triggered (friend adds a friend) | ~30–40% of paid organizers | 2–3 bonus payouts |
+
+**Cost estimate**
+
+| | Low | High |
+|---|---|---|
+| Instagram lead gen | $200 | $500 |
+| Organizer payouts (5–8 × $5) | $25 | $40 |
+| Cascade bonuses (2–3 × $1) | $2 | $3 |
+| **Total lever 1** | **$227** | **$543** |
+
+---
+
+### Lever 2 — Ambassadors
+
+Ambassadors share their personal Draft link inside real friend group chats (WhatsApp, Snapchat, iMessage). Same payout conditions as organizers. Recruited via direct outreach to students on Sideshift.
+
+**Funnel (conservative)**
+
+| Step | Conversion | Output |
+|---|---|---|
+| Students reached on Sideshift | — | ~50–100 outreach |
+| Reach → confirmed ambassador | ~20–30% | 10–20 ambassadors |
+| Ambassador → meets full payout condition | ~20–30% | 2–5 ambassadors paid |
+| Cascade bonus triggered | ~30–40% of paid ambassadors | 1–2 bonus payouts |
+
+**Cost estimate**
+
+| | Low | High |
+|---|---|---|
+| Sideshift outreach (time cost, no media spend) | $0 | $0 |
+| Ambassador payouts (2–5 × $5) | $10 | $25 |
+| Cascade bonuses (1–2 × $1) | $1 | $2 |
+| **Total lever 2** | **$11** | **$27** |
+
+---
+
+### Total budget estimate
+
+| Lever | Low | High |
+|---|---|---|
+| Party organizers (incl. lead gen) | $227 | $543 |
+| Ambassadors | $11 | $27 |
+| **Total** | **$238** | **$570** |
+
+---
+
+### Open questions
+
+- How do we track friend additions reliably in app — is that data accessible today?
+- Does the cascade bonus (+$1) require product instrumentation to verify?
+- Are guests actually adding each other at events, or just installing?
+
+---
+
+## 5. Flows
 
 ---
 
@@ -89,7 +181,7 @@ In short: you talk, DRAFT writes, your friends read.
 **First question**
 
 - DRAFT's first question appears as a bottom sheet over the home feed immediately on first arrival (for users who didn't come from a link). It does not wait for the scheduled 9:47 or 18:12 prompt window.
-- The first question uses a theme from the regular theme library (themes are randomized by the backend - see §8 Prompt architecture).
+- The first question uses a theme from the regular theme library (themes are randomized by the backend - see §9 Prompt architecture).
 
 #### Error paths & edge cases
 
@@ -336,7 +428,7 @@ In short: you talk, DRAFT writes, your friends read.
 
 ---
 
-## 5. Push notifications
+## 6. Push notifications
 
 DRAFT uses 4 types of push notifications:
 
@@ -351,7 +443,7 @@ DRAFT uses 4 types of push notifications:
 
 ---
 
-## 6. Post styles
+## 7. Post styles
 
 > **Naming note:** Posts are called "Drafts" in user-facing copy (notifications, UI labels). "Post" is the internal term used throughout this spec.
 
@@ -430,9 +522,9 @@ DRAFT picks a style at random - the style is randomized by the backend and passe
 
 ---
 
-## 7. Data / Dashboard
+## 8. Data / Dashboard
 
-> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §9.
+> This section defines the Amplitude charts to build before launch. Each chart maps directly to a success metric or a key funnel. Charts are built from the events defined in §10.
 
 ---
 
@@ -468,7 +560,7 @@ DRAFT picks a style at random - the style is randomized by the backend and passe
 
 ---
 
-## 8. Prompt architecture
+## 9. Prompt architecture
 
 DRAFT uses three distinct prompts, each with a specific role. Themes and styles are **hardcoded in the backend** and passed as variables to the prompts, the LLM does not choose them.
 
@@ -496,7 +588,7 @@ A fourth implicit criterion: **the story should be news to friends**, if it's so
 
 **Purpose**: Generate the post from the conversation.
 **Variables**: conversation history from the current exchange + style (randomized by backend from 4 styles).
-**Behaviour**: Triggered 30 minutes after the user's last message. Takes the conversation and writes a post in the assigned style. Output structure: headline + body, following the writing rules defined in §6.
+**Behaviour**: Triggered 30 minutes after the user's last message. Takes the conversation and writes a post in the assigned style. Output structure: headline + body, following the writing rules defined in §7.
 
 ### Themes
 
@@ -525,7 +617,7 @@ Each theme is a topic direction passed as a variable to the check-in prompt. It 
 
 ### Styles
 
-4 styles defined in §6 (Hype, Roast, Teaser, Gossip). Elaborate definitions to be written.
+4 styles defined in §7 (Hype, Roast, Teaser, Gossip). Elaborate definitions to be written.
 
 **Owner**: Aymeric. To do.
 
@@ -536,7 +628,7 @@ Each theme is a topic direction passed as a variable to the check-in prompt. It 
 
 ---
 
-## 9. Analytics event definitions
+## 10. Analytics event definitions
 
 > Naming convention: Title Case, Object followed by past-tense verb (e.g. "Post Viewed", "Prompt Dismissed"). Aligns with Amon standard.
 > All iOS events include `current_view` (required) and `previous_view` (optional) as standard properties on every event.
@@ -574,13 +666,13 @@ TBD when flows are ready.
 
 ---
 
-## 10. Open questions
+## 11. Open questions
 
 **Must be resolved before build**
 
-- `[DONE]` Theme library: 15 themes written, tested against post-ready constraint, and documented in §8. Pending Aymeric validation before build. - owner: Margaux
+- `[DONE]` Theme library: 15 themes written, tested against post-ready constraint, and documented in §9. Pending Aymeric validation before build. - owner: Margaux
 - `[CLARIFY]` Push notification copy: check-in notification should display the question as a chat message preview. Exact copy and format to be defined. - owner: Margaux
-- `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing posts is already defined in §6.) Must be defined before front-end build. - owner: Margaux
+- `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing posts is already defined in §7.) Must be defined before front-end build. - owner: Margaux
 - `[CLARIFY]` Style definitions: elaborate the 4 post styles beyond the current examples. Must be detailed enough for prompt engineering. - owner: Aymeric
 - `[CLARIFY]` Prompt writing: write the 3 prompts (check-in, main/chat, post generation). Check-in + main - owner: Margaux. Post generation + styles - owner: Aymeric.
 
