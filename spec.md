@@ -170,7 +170,7 @@ In short: you talk, DRAFT writes, your friends read.
 
 #### Steps
 
-1. **Home feed**: The user sees a chronological list of posts, newest first. Timestamps are displayed as relative labels ("1 hour ago", "yesterday"). No date dividers.
+1. **Home feed**: The user sees a chronological list of posts, newest first. No date dividers.
 2. **Pull-to-refresh**: The user pulls down to refresh the feed and load new posts published since last open.
 3. **Scrolling**: As the user scrolls, posts enter the viewport. A post is marked as viewed after 1 continuous second of at least 50% visibility.
 4. **Like**: The user taps the like button on a post. The like count is visible to all users.
@@ -198,6 +198,12 @@ In short: you talk, DRAFT writes, your friends read.
 
 - The feed shows the last 48 hours of posts. Not a calendar day. Rolling 48-hour window.
 - Post data is never deleted from the server. Posts are only hidden from the feed after 48h.
+
+**Timestamps in the post**
+
+- < 24h → relative label ("2min ago", "1h ago", "3h ago")
+- 24h–48h → "yesterday"
+- Posts older than 48h are no longer shown in the feed — "2 days ago" never appears.
 
 **Likes**
 
@@ -316,8 +322,7 @@ In short: you talk, DRAFT writes, your friends read.
 
 **Settings content**
 
-- Profile: Name (editable). Access: Notifications. Community: Help, Submit Feature Request, Give a Review. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
-- There is no separate profile tab in MVP. Name is editable directly from Settings.
+- Access: Notifications. Community: Help, Submit Feature Request. Legal: Privacy Policy, Terms of Service. Danger Zone: Delete Account. Footer: app version, build number, User ID.
 - Reuse the generic Amon settings component already used in Orai and Frank.
 
 **Delete account**
@@ -469,15 +474,23 @@ DRAFT uses three distinct prompts, each with a specific role. Themes and styles 
 
 ### Check-in prompt
 
-**Purpose**: Maximize open rate from the push notification and drive the user to start an exchange. Key metric: push sent to first reply rate.
-**Variables**: theme (randomized by backend from ~15 themes) + full conversation history + history of posts already written about the user.
+**Purpose**: Maximize open rate from the push notification and drive the user to start an exchange. Key metric: push sent to first reply rate.  
+**Variables**: theme (randomized by backend from ~15 themes) + full conversation history + history of posts already written about the user.  
 **Behaviour**: Sends a question oriented toward the selected theme, referencing past exchanges when relevant. The question appears as a chat message preview in the push notification.
+
+**Three criteria for a valid check-in question,**  every question generated must satisfy all three:
+
+1. **Answerable without thinking** — the user should be able to reply immediately, without having to craft an answer or weigh what to share.
+2. **Shareable with everyone** — the answer must be comfortable to share with the whole friend group, not just a select few. Questions that touch on intimate or sensitive territory (e.g. love life, mental health) fail this criterion.
+3. **Post-ready from a single reply** — one answer must contain enough signal (a named person, place, event, or situation with context) for DRAFT to write a post. If a topic consistently requires multiple follow-ups to yield anything publishable, it is too abstract.
+
+A fourth implicit criterion: **the story should be news to friends**, if it's something the user has already shared widely, the post adds no value.
 
 ### Main prompt
 
 **Purpose**: Handle the follow-up conversation after the user responds.
-**Variables**: current conversation history.
-**Behaviour**: Curious but not a companion. Asks follow-up questions naturally to show interest, without feeling like an interrogation. One consistent mode throughout. Stops naturally when the user disengages.
+**Variables**: current conversation history + web search.
+**Behaviour**: Curious but not a companion. Asks follow-up questions naturally to show interest, without feeling like an interrogation. One consistent mode throughout. Stops naturally when the user disengages. When the user mentions a specific cultural reference (film, documentary, artist, place), search the web to understand it before responding,so follow-up questions are informed rather than generic.
 
 ### Post generation prompt
 
@@ -487,9 +500,28 @@ DRAFT uses three distinct prompts, each with a specific role. Themes and styles 
 
 ### Themes
 
-~15 themes to be defined. Examples discussed: future plans, weekend, music, travel, relationships. Themes are passed as variables to the check-in prompt - one theme per question.
+Each theme is a topic direction passed as a variable to the check-in prompt. It orients the question without dictating exact wording — the LLM crafts the question from the theme, the user's conversation history, and their post history. The backend randomizes theme selection; the LLM does not choose themes.
 
-**Owner**: Margaux. To do.
+**Live ops** — the theme list is a starting base, not a fixed set. Themes will be added, adjusted, or retired based on test results.
+
+#### Theme list
+
+
+| #   | Name                | Description                                                                                                      |
+| --- | ------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 1   | `weekend`           | What the user has planned or just experienced for the weekend — trips, plans, or low-key moments.                |
+| 2   | `future_plans`      | Something upcoming the user is anticipating — a trip, event, decision, or life change.                           |
+| 3   | `music`             | What they've been listening to lately. An album, artist, or song on rotation.                                    |
+| 4   | `travel`            | A recent trip or upcoming travel. A quick weekend away counts.                                                   |
+| 5   | `food`              | A recent meal, craving, restaurant discovery, or first attempt at cooking something.                             |
+| 6   | `hobbies`           | Something the user is actively into or learning. A recurring activity or new skill.                              |
+| 7   | `current_mood`      | How the user is genuinely feeling this week, anchored in a specific recent context (see note below).             |
+| 8   | `small_win`         | Something the user quietly accomplished — even if it seems minor to others.                                      |
+| 9   | `current_obsession` | A show, book, game, podcast, or creator they've been consuming non-stop.                                         |
+| 10  | `recent_discovery`  | A new place, person, thing, or idea they just encountered for the first time.                                    |
+| 11  | `social_moment`     | Something that happened between the user and specific people recently — a gathering, a conversation, a surprise. |
+| 12  | `random_moment`     | A specific small moment or unusual detail from their day or week. The more concrete, the better.                 |
+
 
 ### Styles
 
@@ -546,7 +578,7 @@ TBD when flows are ready.
 
 **Must be resolved before build**
 
-- `[CLARIFY]` Theme library: the full list of ~15 themes DRAFT uses to generate daily questions (e.g. weekend plans, current music, upcoming events). Must be written before build. - owner: Margaux
+- `[DONE]` Theme library: 15 themes written, tested against post-ready constraint, and documented in §8. Pending Aymeric validation before build. - owner: Margaux
 - `[CLARIFY]` Push notification copy: check-in notification should display the question as a chat message preview. Exact copy and format to be defined. - owner: Margaux
 - `[CLARIFY]` Tone of voice when asking questions: DRAFT's register, level of warmth, and conversational style during exchanges. (Tone when writing posts is already defined in §6.) Must be defined before front-end build. - owner: Margaux
 - `[CLARIFY]` Style definitions: elaborate the 4 post styles beyond the current examples. Must be detailed enough for prompt engineering. - owner: Aymeric
